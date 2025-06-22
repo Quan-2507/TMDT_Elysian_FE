@@ -1,0 +1,96 @@
+.forgot-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f3f4f6;
+}
+
+.forgot-box {
+    width: 400px;
+    background: white;
+    padding: 30px 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.app-title {
+    color: #2973B2;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.heading {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.subheading {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.forgot-form {
+    text-align: left;
+}
+
+.forgot-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.forgot-form input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.submit-btn {
+    width: 100%;
+    background-color: #38b2ac;
+    color: white;
+    padding: 10px;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+}
+
+.divider hr {
+    flex: 1;
+    height: 1px;
+    background: #ccc;
+    border: none;
+}
+
+.divider span {
+    margin: 0 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.back-link {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.back-link a {
+    color: #007bff;
+    text-decoration: underline;
+}

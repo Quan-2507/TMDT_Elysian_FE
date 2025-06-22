@@ -7,6 +7,7 @@ import { BACKEND_URL_HTTP } from '../../../config';
 import imgHolder from '../img/login-holder.jpg';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import './forgot.css'
 
 function ForgotPassword() {
     const navigate = useNavigate();
@@ -70,53 +71,47 @@ function ForgotPassword() {
     }
     
     return (
-        <div className="background-image">
-            <div className='overlay'>
-                <div className='main-container content'>
-                    {isLoading && (
-                        <div className="loading-spinner">
-                            <div className="spinner"></div>
-                            <div className="loading-text">Đang xử lý...</div>
-                        </div>
-                    )}
-                    <div className='img-container'>
-                        <img src={imgHolder} alt='Login img holder'></img>
-                    </div>
-                    <div className="login-container">
-                        <h2>Quên mật khẩu</h2>
-                        <form onSubmit={recoverPasswordHandler}>
-                            <div className="form-inputs">
-                                <div className={`form-group ${isEmailFocused ? 'focused' : ''}`}>
-                                    <label>
-                                        <FaEnvelope/> 
-                                    </label>
-                                    <input
-                                        type='text'
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        onFocus={() => setIsEmailFocused(true)}
-                                        onBlur={() => setIsEmailFocused(false)}
-                                        placeholder='Nhập email của bạn'
-                                    />
-                                </div>
-                       
-                                <button className='login-btn' type='submit' disabled={isLoading}>
-                                    LẤY LẠI MẬT KHẨU
-                                </button>
-                            </div>
-                            
-                            <div className="social-section">
-                                <div className='break-line'>hoặc</div>
-                                
-                                <p className='register-here'>
-                                    <Link to="/login">Quay lại đăng nhập</Link>
-                                </p>
-                            </div>
-                        </form>
-                    </div>
+        <div className="forgot-wrapper">
+            <div className="forgot-box">
+                <h2 className="app-title">ELYSIAN</h2>
+                <h3 className="heading">KHÔI PHỤC MẬT KHẨU</h3>
+                <p className="subheading">Nhập địa chỉ email để lấy lại mật khẩu của bạn.</p>
+
+                <form onSubmit={recoverPasswordHandler} className="forgot-form">
+                    <label>Email</label>
+                    <input
+                        type="text"
+                        placeholder="Nhập email của bạn"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onFocus={() => setIsEmailFocused(true)}
+                        onBlur={() => setIsEmailFocused(false)}
+                    />
+
+                    <button type="submit" className="submit-btn" disabled={isLoading}>
+                        Lấy lại mật khẩu
+                    </button>
+                </form>
+
+                <div className="divider">
+                    <hr/>
+                    <span>hoặc</span>
+                    <hr/>
                 </div>
+
+                <p className="back-link">
+                    <Link to="/login">Quay lại đăng nhập</Link>
+                </p>
+
+                {isLoading && (
+                    <div className="loading-spinner">
+                        <div className="spinner"></div>
+                        <div className="loading-text">Đang xử lý...</div>
+                    </div>
+                )}
             </div>
         </div>
+
     );
 }
 

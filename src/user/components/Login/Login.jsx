@@ -11,6 +11,7 @@ import {BACKEND_URL_HTTP, BACKEND_URL_HTTPS} from '../../../config';
 import imgHolder from '../img/login-holder.jpg';
 import Swal from 'sweetalert2';
 import authService from '../../../services/authService';
+import './login.css'
 function Login() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
@@ -284,74 +285,62 @@ function Login() {
     };
 
     return (
-        <div className="background-image">
-            <div className='overlay'>
-                <div className='main-container content'>
-                    {isLoading && (
-                        <div className="loading-spinner">
-                            <div className="spinner"></div>
-                            <div className="loading-text">Đang xử lý...</div>
-                </div>
-                    )}
-                    {/*<div className='img-container'>*/}
-                    {/*    <img src={imgHolder} alt='Login img holder'></img>*/}
-                    {/*  </div>*/}
-                    <div className="login-container">
-                        <h2>ELYSIAN</h2>
-                        <form onSubmit={loginHandler}>
-                            <div className="form-inputs">
-                                <div className={`form-group ${isEmailFocused ? 'focused' : ''}`}>
-                                    <label>
-                                        <FaEnvelope/>
-                                    </label>
-                                    <input
-                                        type='text'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-                                        onFocus={() => setIsEmailFocused(true)}
-                                        onBlur={() => setIsEmailFocused(false)}
-                                        placeholder='Email'
-                                    />
-                                </div>
-                                <div className={`form-group ${isPasswordFocused ? 'focused' : ''}`}>
-                                    <label>
-                                        <FaLock/>
-                        </label>
-                                    <input
-                                        type='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-                                        onFocus={() => setIsPasswordFocused(true)}
-                                        onBlur={() => setIsPasswordFocused(false)}
-                                        placeholder='Mật khẩu'
-                                    />
-                                </div>
+        <div className="login-box">
+            <h2 className="brand-name">ELYSIAN</h2>
+            <h3 className="welcome-text">Rất vui được gặp lại bạn!</h3>
 
-                                <div className='forget-pass'>
-                                    <Link to="/forgot-password">Quên mật khẩu?</Link>
-                      </div>
+            <div className="social-login">
+                <button className="google-btn" onClick={() => googleLogin()}>
+                    <FcGoogle size={20} style={{marginRight: '8px'}}/>
+                    Tiếp tục với Google
+                </button>
+                <button className="facebook-btn" onClick={handleFacebookLogin}>
+                    <BsFacebook size={18} style={{marginRight: '8px'}}/>
+                    Tiếp tục với Facebook
+                </button>
+            </div>
 
-                                <button className='login-btn' type='submit' disabled={isLoading}>
-                                    ĐĂNG NHẬP
-                        </button>
-                      </div>
+            <div className="divider">
+                <span>hoặc</span>
+            </div>
 
-                            <div className="social-section">
-                                <div className='break-line'>hoặc đăng nhập với</div>
+            <form onSubmit={loginHandler} className="login-form">
+                <label>
+                    Tên đăng nhập hoặc Email
+                    <Link to="/forgot-username" className="right-link">Gợi nhớ</Link>
+                </label>
+                <input
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Nhập email..."
+                />
 
-                                <div className='icon-login'>
-                                    <FcGoogle size={32} onClick={() => googleLogin()} style={{cursor: 'pointer', margin: '10px'}}/>
-                                    <BsFacebook size={30} color="#1877F2" onClick={handleFacebookLogin} style={{cursor: 'pointer', margin: '10px'}}/>
-                                    {/*<BsTwitter size={30} color="#1DA1F2" style={{cursor: 'pointer', margin: '10px'}}/>*/}
-                                </div>
+                <label>
+                    Mật khẩu
+                    <Link to="/forgot-password" className="right-link">Quên?</Link>
+                </label>
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Nhập mật khẩu..."
+                />
 
-                                <p className='register-here'>Bạn chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link></p>
-                            </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-      </div>
+                <button type="submit" className="submit-btn">Đăng nhập</button>
+            </form>
+
+            <p className="register-text">
+                Chưa có tài khoản? <Link to="/register">Tạo tài khoản</Link>
+            </p>
+
+            <p className="policy-text">
+                Bằng cách tiếp tục, bạn xác nhận bạn từ 18 tuổi trở lên và đồng ý với
+                <Link to="/privacy-policy"> Chính sách quyền riêng tư</Link> và
+                <Link to="/terms-of-use"> Điều khoản sử dụng</Link>.
+            </p>
+        </div>
+
     );
 }
 
