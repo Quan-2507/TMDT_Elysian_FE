@@ -16,7 +16,8 @@
 /* Background & Container Styles */
 .background-image {
     position: relative;
-    background-image: url('../img/HhmATQ.jpg');
+    background-color: white;
+    /*background-image: url('../img/HhmATQ.jpg');*/
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -73,6 +74,8 @@
 .login-container {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
     background-color: rgba(255, 255, 255, 0.95);
     width: 450px;
     height: 550px;

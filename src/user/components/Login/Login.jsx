@@ -293,11 +293,11 @@ function Login() {
                             <div className="loading-text">Đang xử lý...</div>
                 </div>
                     )}
-                    <div className='img-container'>
-                        <img src={imgHolder} alt='Login img holder'></img>
-                      </div>
+                    {/*<div className='img-container'>*/}
+                    {/*    <img src={imgHolder} alt='Login img holder'></img>*/}
+                    {/*  </div>*/}
                     <div className="login-container">
-                        <h2>Đăng nhập</h2>
+                        <h2>ELYSIAN</h2>
                         <form onSubmit={loginHandler}>
                             <div className="form-inputs">
                                 <div className={`form-group ${isEmailFocused ? 'focused' : ''}`}>
@@ -342,7 +342,7 @@ function Login() {
                                 <div className='icon-login'>
                                     <FcGoogle size={32} onClick={() => googleLogin()} style={{cursor: 'pointer', margin: '10px'}}/>
                                     <BsFacebook size={30} color="#1877F2" onClick={handleFacebookLogin} style={{cursor: 'pointer', margin: '10px'}}/>
-                                    <BsTwitter size={30} color="#1DA1F2" style={{cursor: 'pointer', margin: '10px'}}/>
+                                    {/*<BsTwitter size={30} color="#1DA1F2" style={{cursor: 'pointer', margin: '10px'}}/>*/}
                                 </div>
 
                                 <p className='register-here'>Bạn chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link></p>
