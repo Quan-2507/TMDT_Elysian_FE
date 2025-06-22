@@ -5,6 +5,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './Home.css';
 import { getAllProducts, getTopSellingProducts, getFeaturedProducts } from '../../../api/productApi';
+import {addToCart} from "../../../store/Actions";
+import { useDispatch, useSelector } from 'react-redux';
+import Swal from "sweetalert2";
 
 const Home = () => {
 	const slideImages = [
@@ -13,7 +16,9 @@ const Home = () => {
 	];
 
 	const navigate = useNavigate();
-
+	const cart = useSelector(state => state.cart);
+	const dispatch = useDispatch();
+	const [quantity, setQuantity] = useState(1);
 	const [bestSellerProducts, setBestSellerProducts] = useState([]);
 	const [newProducts, setNewProducts] = useState([]);
 	const [favoriteProducts, setFavoriteProducts] = useState([]);
@@ -120,6 +125,63 @@ const Home = () => {
 		navigate(`/product/${id}`);
 	};
 
+	const handleAddToCart = (product) => {
+		// Kiểm tra nếu sản phẩm hết hàng
+		if (!product.inStock) {
+			Swal.fire({
+				title: 'Sản phẩm đã hết hàng!',
+				text: 'Sản phẩm này hiện đã hết hàng, vui lòng chọn sản phẩm khác hoặc quay lại sau.',
+				icon: 'error',
+				confirmButtonText: 'Đã hiểu',
+				confirmButtonColor: '#e65540'
+			});
+			return;
+		}
+		const productToAdd = {
+			id: parseInt(product.id),
+			quantity: 1,
+		};
+
+		// Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng với cùng size
+		const existingItem = cart.find(item =>
+			item.id === productToAdd.id
+		);
+		if (existingItem) {
+			const message = 'Sản phẩm đã có trong giỏ hàng. Bạn có muốn xem giỏ hàng không?';
+
+			Swal.fire({
+				title: 'Sản phẩm đã tồn tại',
+				text: message,
+				icon: 'info',
+				showCancelButton: true,
+				confirmButtonText: 'Xem giỏ hàng',
+				cancelButtonText: 'Tiếp tục mua hàng',
+				confirmButtonColor: '#e65540'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					navigate('/cart');
+				}
+			});
+
+			return;
+		}
+
+		dispatch(addToCart(productToAdd));
+
+		Swal.fire({
+			title: 'Thêm vào giỏ hàng thành công!',
+			text: 'Bạn có muốn đến trang giỏ hàng không?',
+			icon: 'success',
+			showCancelButton: true,
+			confirmButtonText: 'Đến giỏ hàng',
+			cancelButtonText: 'Tiếp tục mua hàng',
+			confirmButtonColor: '#e65540'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				navigate('/cart');
+			}
+		});
+	};
 	return (
 		<div className="home-page">
 			{/* Main Banner Section */}
@@ -127,46 +189,27 @@ const Home = () => {
 				<div className="container-fluid px-4">
 					<div className="row g-4">
 						{/* Banner chính bên trái */}
-						<div className="col-lg-8 col-md-12">
-							<div className="hero-main-banner" style={{backgroundImage: `url('assets/images/banner-10.jpg')`}}>
+						<div className="col-lg-12 col-md-12">
+							<div className="hero-main-banner" style={{backgroundImage: `url('assets/images/banner20.png')`}}>
 								<div className="banner-overlay">
 									<div className="banner-content">
-										<h1 className="main-banner-title">ATLANTIS COLLECTION</h1>
+										<h1 className="main-banner-title">Themes & Website Templates cho mọi dự án</h1>
 										<p className="main-banner-text">
-											Khám phá bộ sưu tập đồng phục sang trọng với thiết kế tinh tế
+											Khám phá hàng nghìn templates, themes,... với thiết kế tinh tế, hiện đại
 										</p>
-										<button className="main-banner-btn" onClick={() => navigate('/products')}>Mua Ngay</button>
+										<div className="search-box">
+											<input type="text" placeholder="e.g. responsive WordPress"/>
+											<button type="submit">
+												Search
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 
 						{/* Banner phụ bên phải */}
-						<div className="col-lg-4 col-md-12">
-							<div className="side-banner-container">
-								<div className="side-banner-item">
-									<div className="side-banner" style={{backgroundImage: `url('assets/images/img.png')`}}>
-										<div className="side-banner-overlay">
-											<div className="side-banner-content">
-												<span className="side-discount">GIẢM THIỆU 20%</span>
-												<h3 className="side-banner-title">KHÁM PHÁ</h3>
-												<button className="side-banner-btn" onClick={() => navigate('/products')}>Đến Shop</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="side-banner-item">
-									<div className="side-banner" style={{backgroundImage: `url('assets/images/img_1.png')`}}>
-										<div className="side-banner-overlay">
-											<div className="side-banner-content">
-												<h3 className="side-banner-title">KHÁM PHÁ</h3>
-												<button className="side-banner-btn"onClick={() => navigate('/products')}>Đến Shop</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+
 					</div>
 				</div>
 			</section>
@@ -178,37 +221,37 @@ const Home = () => {
 						<div className="col-lg-3 col-md-6">
 							<div className="feature-box">
 								<div className="feature-icon">
-									<i className="fa fa-trophy"></i>
+									<i class="fa-solid fa-cart-shopping"></i>
 								</div>
-								<h5 className="feature-title">Quality Product</h5>
-								<p className="feature-desc">Sản phẩm chất lượng cao</p>
+								<h5 className="feature-title">Ecommerce</h5>
+								<p className="feature-desc">Giao diện thương mai điện tử</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6">
 							<div className="feature-box">
 								<div className="feature-icon">
-									<i className="fa fa-shipping-fast"></i>
+									<i className="fa-brands fa-wordpress"></i>
 								</div>
-								<h5 className="feature-title">Free Shipping</h5>
-								<p className="feature-desc">Miễn phí vận chuyển</p>
+								<h5 className="feature-title">WordPress themes</h5>
+								<p className="feature-desc">Chủ đề WordPress chuyên nghiệp</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6">
 							<div className="feature-box">
 								<div className="feature-icon">
-									<i className="fa fa-undo"></i>
+									<i className="fa-solid fa-pen-to-square"></i>
 								</div>
-								<h5 className="feature-title">14-Day Return</h5>
-								<p className="feature-desc">Đổi trả trong 14 ngày</p>
+								<h5 className="feature-title">Blogging</h5>
+								<p className="feature-desc">Hàng nghìn trang blogger</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6">
 							<div className="feature-box">
 								<div className="feature-icon">
-									<i className="fa fa-headset"></i>
+									<i className="fa-regular fa-file"></i>
 								</div>
-								<h5 className="feature-title">24/7 Support</h5>
-								<p className="feature-desc">Hỗ trợ 24/7</p>
+								<h5 className="feature-title">Site templates</h5>
+								<p className="feature-desc">Html và website templates</p>
 							</div>
 						</div>
 					</div>
@@ -216,48 +259,48 @@ const Home = () => {
 			</section>
 
 			{/* Featured Products Grid */}
-			<section className="featured-grid-section">
-				<div className="container">
-					<div className="section-header text-center">
-						<h2 className="section-title">SẢN PHẨM TIÊU BIỂU</h2>
-						<p className="section-subtitle">Khám phá những sản phẩm trang sức được yêu thích nhất</p>
-					</div>
-					<div className="row justify-content-center g-4">
-						{favoriteProducts.slice(0, 8).map((product, index) => (
-							<div key={product.id} className="col-xl-3 col-lg-4 col-md-6">
-								<div className="featured-product-card">
-									{index < 4 && (
-										<div className="discount-label">
-											GIẢM {Math.floor(Math.random() * 20 + 10)}%
-										</div>
-									)}
-									<div className="product-img-container">
-										<img src={product.img} alt={product.name} className="product-img"/>
-										<div className="product-hover-overlay">
-											<button
-												onClick={() => handleProductClick(product.id)}
-												className="quick-view-btn"
-											>
-												<i className="fa fa-eye"></i>
-												Xem chi tiết
-											</button>
-										</div>
-									</div>
-									<div className="product-details">
-										<h5 className="product-title">{product.name}</h5>
-										<div className="product-pricing">
-											<span className="current-price">{product.price.toLocaleString()} ₫</span>
-											{index < 4 && (
-												<span className="old-price">{(product.price * 1.2).toLocaleString()} ₫</span>
-											)}
-										</div>
-									</div>
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
-			</section>
+			{/*<section className="featured-grid-section">*/}
+			{/*	<div className="container">*/}
+			{/*		<div className="section-header text-center">*/}
+			{/*			<h2 className="section-title">SẢN PHẨM TIÊU BIỂU</h2>*/}
+			{/*			<p className="section-subtitle">Khám phá những sản phẩm trang sức được yêu thích nhất</p>*/}
+			{/*		</div>*/}
+			{/*		<div className="row justify-content-center g-4">*/}
+			{/*			{favoriteProducts.slice(0, 8).map((product, index) => (*/}
+			{/*				<div key={product.id} className="col-xl-3 col-lg-4 col-md-6">*/}
+			{/*					<div className="featured-product-card">*/}
+			{/*						{index < 4 && (*/}
+			{/*							<div className="discount-label">*/}
+			{/*								GIẢM {Math.floor(Math.random() * 20 + 10)}%*/}
+			{/*							</div>*/}
+			{/*						)}*/}
+			{/*						<div className="product-img-container">*/}
+			{/*							<img src={product.img} alt={product.name} className="product-img"/>*/}
+			{/*							<div className="product-hover-overlay">*/}
+			{/*								<button*/}
+			{/*									onClick={() => handleProductClick(product.id)}*/}
+			{/*									className="quick-view-btn"*/}
+			{/*								>*/}
+			{/*									<i className="fa fa-eye"></i>*/}
+			{/*									Xem chi tiết*/}
+			{/*								</button>*/}
+			{/*							</div>*/}
+			{/*						</div>*/}
+			{/*						<div className="product-details">*/}
+			{/*							<h5 className="product-title">{product.name}</h5>*/}
+			{/*							<div className="product-pricing">*/}
+			{/*								<span className="current-price">{product.price.toLocaleString()} ₫</span>*/}
+			{/*								{index < 4 && (*/}
+			{/*									<span className="old-price">{(product.price * 1.2).toLocaleString()} ₫</span>*/}
+			{/*								)}*/}
+			{/*							</div>*/}
+			{/*						</div>*/}
+			{/*					</div>*/}
+			{/*				</div>*/}
+			{/*			))}*/}
+			{/*		</div>*/}
+			{/*	</div>*/}
+			{/*</section>*/}
 
 			{/* Best Seller Section */}
 			<section className="bg0 p-t-23 p-b-140">
@@ -274,17 +317,10 @@ const Home = () => {
 								<div key={product.id} className="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
 									<div className="block2">
 										<div className="block2-pic hov-img0">
-											<img src={product.img} alt={product.name}/>
-											<button
-												onClick={() => handleProductClick(product.id)}
-												className="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04"
-											>
-												Chi tiết
-											</button>
+											<img src={product.img} alt={product.name} style={{height:"200px"}}/>
 										</div>
-
-										<div className="block2-txt flex-w flex-t p-t-14">
-											<div className="block2-txt-child1 flex-col-l">
+										<div className="block2-txt flex-w p-t-14">
+											<div className="block2-txt-child1 flex-col-l"  style={{width:"100%"}}>
 												<a
 													href={`/product/${product.id}`}
 													className="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6"
@@ -294,6 +330,26 @@ const Home = () => {
 												<span className="stext-105 cl3">
 													{product.price.toLocaleString()} VND
 												</span>
+												<div style={{display:"flex",justifyContent:"flex-end",gap:"10px",width: "100%"}} className="nav-btn">
+													<button
+														onClick={() => handleAddToCart(product)}
+														className=""
+														style={{
+															border: "1px solid #2973B2",
+															padding: "5px",
+															color: "#2973B2"
+														}}
+													>
+														<i className="fa-solid fa-cart-shopping"></i>
+													</button>
+													<button
+														onClick={() => handleProductClick(product.id)}
+													className=""
+													style={{border: "1px solid #2973B2", padding: "5px", color:"#2973B2"}}
+												>
+													Chi tiết
+												</button>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -315,17 +371,10 @@ const Home = () => {
 								<div key={product.id} className="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
 									<div className="block2">
 										<div className="block2-pic hov-img0">
-											<img src={product.img} alt={product.name}/>
-											<button
-												onClick={() => handleProductClick(product.id)}
-												className="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04"
-											>
-												Chi tiết
-											</button>
+											<img src={product.img} alt={product.name} style={{height: "200px"}}/>
 										</div>
-
-										<div className="block2-txt flex-w flex-t p-t-14">
-											<div className="block2-txt-child1 flex-col-l">
+										<div className="block2-txt flex-w p-t-14">
+											<div className="block2-txt-child1 flex-col-l" style={{width:"100%"}}>
 												<a
 													href={`/product/${product.id}`}
 													className="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6"
@@ -335,6 +384,31 @@ const Home = () => {
 												<span className="stext-105 cl3">
 													{product.price.toLocaleString()} VND
 												</span>
+												<div style={{display: "flex", justifyContent: "flex-end", gap: "10px",width: "100%"}}
+													 className="nav-btn">
+													<button
+														onClick={() => handleAddToCart(product)}
+														className=""
+														style={{
+															border: "1px solid #2973B2",
+															padding: "5px",
+															color: "#2973B2"
+														}}
+													>
+														<i class="fa-solid fa-cart-shopping"></i>
+													</button>
+													<button
+														onClick={() => handleProductClick(product.id)}
+														className=""
+														style={{
+															border: "1px solid #2973B2",
+															padding: "5px",
+															color: "#2973B2"
+														}}
+													>
+														Chi tiết
+													</button>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -356,17 +430,10 @@ const Home = () => {
 								<div key={product.id} className="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
 									<div className="block2">
 										<div className="block2-pic hov-img0">
-											<img src={product.img} alt={product.name}/>
-											<button
-												onClick={() => handleProductClick(product.id)}
-												className="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04"
-											>
-												Chi tiết
-											</button>
+											<img src={product.img} alt={product.name} style={{height: "200px"}}/>
 										</div>
-
-										<div className="block2-txt flex-w flex-t p-t-14">
-											<div className="block2-txt-child1 flex-col-l">
+										<div className="block2-txt flex-w p-t-14">
+											<div className="block2-txt-child1 flex-col-l" style={{width:"100%"}}>
 												<a
 													href={`/product/${product.id}`}
 													className="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6"
@@ -376,6 +443,31 @@ const Home = () => {
 												<span className="stext-105 cl3">
 													{product.price.toLocaleString()} VND
 												</span>
+												<div style={{display: "flex", justifyContent: "flex-end", gap: "10px",width: "100%"}}
+													 className="nav-btn">
+													<button
+														onClick={() => handleAddToCart(product)}
+														className=""
+														style={{
+															border: "1px solid #2973B2",
+															padding: "5px",
+															color: "#2973B2"
+														}}
+													>
+														<i className="fa-solid fa-cart-shopping"></i>
+													</button>
+													<button
+														onClick={() => handleProductClick(product.id)}
+														className=""
+														style={{
+															border: "1px solid #2973B2",
+															padding: "5px",
+															color: "#2973B2"
+														}}
+													>
+														Chi tiết
+													</button>
+												</div>
 											</div>
 										</div>
 									</div>
