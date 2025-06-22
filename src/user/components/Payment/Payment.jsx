@@ -44,8 +44,6 @@ const Payment = () => {
     // Payment methods from API
     const [paymentMethods, setPaymentMethods] = useState([]);
 
-    // Phí vận chuyển cố định
-    const shippingFee = 30000;
 
     // Fetch payment methods
     useEffect(() => {
@@ -170,7 +168,7 @@ const Payment = () => {
     // Calculate total with discount
     const calculateTotal = () => {
         const subtotal = calculateSubtotal();
-        return subtotal + shippingFee - discountAmount;
+        return subtotal +  discountAmount;
     };
 
     const handleSubmit = async (e) => {
@@ -569,25 +567,19 @@ const Payment = () => {
                                 if (!product) return null;
                                 
                                 return (
-                                    <div className="flex-w flex-t p-b-13" key={item.id}>
+                                    <div className="flex-w flex-t bor12 p-b-13" key={item.id}>
                                         <div className="size-208">
-                                            <img src={product.img} alt={product.name} className="order-product-img" />
+                                            <div className="product-name">{product.name}</div>
                                             </div>
                                         <div className="size-209">
                                             <div className="product-details">
-                                                <div className="product-name">{product.name}</div>
-                                                <div className="product-variants">
-                                                    {item.size && <span className="product-size">Size: {item.size}</span>}
-                                                    {item.color && <span className="product-color">Màu: {item.color}</span>}
-                                                </div>
-                                                <div className="product-quantity">x{item.quantity}</div>
                                                 <div className="product-price">{(product.price * item.quantity).toLocaleString()} VND</div>
                                             </div>
                                         </div>
                                     </div>
                                 );
                             })}
-                                </div>
+                        </div>
 
                         <div className="flex-w flex-t p-t-27 p-b-33">
                             <div className="size-208">
