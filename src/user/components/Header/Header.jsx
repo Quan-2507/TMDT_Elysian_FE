@@ -20,24 +20,27 @@ const Header = () => {
 	// Styles inline với màu đen
 	const styles = {
 		headerContainer: {
-			background: 'white',
+			background: '#2973B2',
 			boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
 			position: 'sticky',
 			top: 0,
 			zIndex: 1000
 		},
 		topBar: {
-			background: '#333',
+			background: '#2973B2',
 			color: 'white',
 			padding: '8px 0',
 			fontSize: '13px'
 		},
 		topBarLink: {
-			color: 'white',
+			color: '#333',
 			textDecoration: 'none',
-			fontSize: '13px',
 			padding: '4px 8px',
-			transition: 'color 0.3s ease'
+			fontSize: '14px',
+			fontWeight: '500',
+			transition: 'color 0.3s ease',
+			textTransform: 'uppercase',
+			whiteSpace: 'nowrap'
 		},
 		mainHeader: {
 			padding: '20px 0',
@@ -45,7 +48,7 @@ const Header = () => {
 		},
 		logo: {
 			height: '90px',
-			width: '90px',
+			width: '32.5px',
 			transition: 'transform 1.5s ease'
 		},
 		navMenu: {
@@ -67,13 +70,14 @@ const Header = () => {
 			whiteSpace: 'nowrap'
 		},
 		activeNavLink: {
-			color: '#717fe0',
+			color: '#ffffff',
 			fontWeight: '600'
 		},
 		iconContainer: {
 			display: 'flex',
 			alignItems: 'center',
-			gap: '10px'
+			gap: '10px',
+			justifyContent: 'flex-end',
 		},
 		iconItem: {
 			position: 'relative',
@@ -91,7 +95,7 @@ const Header = () => {
 			position: 'absolute',
 			top: '-5px',
 			right: '-5px',
-			background: '#717fe0',
+			background: '#ffffff',
 			color: 'white',
 			borderRadius: '50%',
 			width: '18px',
@@ -120,7 +124,7 @@ const Header = () => {
 			width: '200px'
 		},
 		searchIcon: {
-			color: 'red',
+			color: '#333',
 			fontSize: '18px',
 			cursor: 'pointer',
 			marginRight: '5px'
@@ -155,7 +159,7 @@ const Header = () => {
 			cursor: 'pointer'
 		},
 		hotBadge: {
-			background: '#717fe0',
+			background: '#ffffff',
 			color: 'white',
 			padding: '2px 6px',
 			borderRadius: '8px',
@@ -163,6 +167,16 @@ const Header = () => {
 			fontWeight: 'bold',
 			textTransform: 'uppercase',
 			marginLeft: '5px'
+		},
+		logoName: {
+			color: '#ffffff',
+			textDecoration: 'none',
+			fontSize: '30px',
+			fontWeight: '500',
+			padding: '10px 15px',
+			transition: 'color 0.3s ease',
+			textTransform: 'uppercase',
+			whiteSpace: 'nowrap'
 		}
 	};
 
@@ -306,18 +320,32 @@ const Header = () => {
 				{/* Top Bar */}
 				<div style={styles.topBar}>
 					<div className="content-topbar flex-sb-m h-full container">
+
 						<div className="left-top-bar">
-							Miễn phí vận chuyển cho đơn hàng tiêu chuẩn trên $100
+
 						</div>
 						<div className="right-top-bar flex-w h-full">
-							<Link
-								to="/home"
-								style={styles.topBarLink}
-								onMouseEnter={(e) => e.target.style.color = '#ccc'}
-								onMouseLeave={(e) => e.target.style.color = 'white'}
-							>
-								Trợ giúp và câu hỏi thường gặp
-							</Link>
+							{/*<Link*/}
+							{/*	to="/home"*/}
+							{/*	style={styles.topBarLink}*/}
+							{/*	onMouseEnter={(e) => e.target.style.color = '#ccc'}*/}
+							{/*	onMouseLeave={(e) => e.target.style.color = 'white'}*/}
+							{/*>*/}
+							{/*	Trợ giúp và câu hỏi thường gặp*/}
+							{/*</Link>*/}
+							{/*<Link*/}
+							{/*	to="/shoppingCart"*/}
+							{/*	style={styles.iconItem}*/}
+							{/*	onMouseEnter={(e) => e.target.style.color = '#ffffff'}*/}
+							{/*	onMouseLeave={(e) => e.target.style.color = '#333'}*/}
+							{/*>*/}
+							{/*	<i className="zmdi zmdi-shopping-cart"></i>*/}
+							{/*	{cart.length > 0 && (*/}
+							{/*		<span style={styles.badge}>*/}
+							{/*			{cart.length}*/}
+							{/*		</span>*/}
+							{/*	)}*/}
+							{/*</Link>*/}
 
 							{loggedIn ? (
 								<Link
@@ -329,8 +357,8 @@ const Header = () => {
 										textOverflow: 'ellipsis',
 										whiteSpace: 'nowrap'
 									}}
-									onMouseEnter={(e) => e.target.style.color = '#ccc'}
-									onMouseLeave={(e) => e.target.style.color = 'white'}
+									onMouseEnter={(e) => e.target.style.color = '#ffffff'}
+									onMouseLeave={(e) => e.target.style.color = '#333333'}
 								>
 									<span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{username}</span>
 								</Link>
@@ -338,29 +366,29 @@ const Header = () => {
 								<Link
 									to="/login"
 									style={styles.topBarLink}
-									onMouseEnter={(e) => e.target.style.color = '#ccc'}
-									onMouseLeave={(e) => e.target.style.color = 'white'}
+									onMouseEnter={(e) => e.target.style.color = '#ffffff'}
+									onMouseLeave={(e) => e.target.style.color = '#333333'}
 								>
 									<span>Đăng nhập</span>
 								</Link>
 							)}
 
-							<Link
-								to="/home"
-								style={styles.topBarLink}
-								onMouseEnter={(e) => e.target.style.color = '#ccc'}
-								onMouseLeave={(e) => e.target.style.color = 'white'}
-							>
-								EN
-							</Link>
-							<Link
-								to="/home"
-								style={styles.topBarLink}
-								onMouseEnter={(e) => e.target.style.color = '#ccc'}
-								onMouseLeave={(e) => e.target.style.color = 'white'}
-							>
-								VN
-							</Link>
+							{/*<Link*/}
+							{/*	to="/home"*/}
+							{/*	style={styles.topBarLink}*/}
+							{/*	onMouseEnter={(e) => e.target.style.color = '#ccc'}*/}
+							{/*	onMouseLeave={(e) => e.target.style.color = 'white'}*/}
+							{/*>*/}
+							{/*	EN*/}
+							{/*</Link>*/}
+							{/*<Link*/}
+							{/*	to="/home"*/}
+							{/*	style={styles.topBarLink}*/}
+							{/*	onMouseEnter={(e) => e.target.style.color = '#ccc'}*/}
+							{/*	onMouseLeave={(e) => e.target.style.color = 'white'}*/}
+							{/*>*/}
+							{/*	VN*/}
+							{/*</Link>*/}
 						</div>
 					</div>
 				</div>
@@ -376,10 +404,10 @@ const Header = () => {
 						{/* Logo */}
 						<Link to="/home" className="logo">
 							<img
-								src={`${process.env.PUBLIC_URL}/assets/images/icons/logo-01.png`}
+								src={`${process.env.PUBLIC_URL}/assets/images/icons/logo-Elysian-by-Gamuda-Land-BG.webp`}
 								alt="IMG-LOGO"
 								style={styles.logo}
-							/>
+							/><a style={styles.logoName}>ELYSIAN</a>
 						</Link>
 
 						{/* Navigation Menu */}
@@ -394,7 +422,7 @@ const Header = () => {
 										}}
 										onMouseEnter={(e) => {
 											if (!isActiveMenu('/home')) {
-												e.target.style.color = '#717fe0';
+												e.target.style.color = '#ffffff';
 											}
 										}}
 										onMouseLeave={(e) => {
@@ -415,7 +443,7 @@ const Header = () => {
 										}}
 										onMouseEnter={(e) => {
 											if (!isActiveMenu('/product')) {
-												e.target.style.color = '#717fe0';
+												e.target.style.color = '#ffffff';
 											}
 										}}
 										onMouseLeave={(e) => {
@@ -427,29 +455,29 @@ const Header = () => {
 										Cửa hàng
 									</Link>
 								</li>
-								<li>
-									<Link
-										to="/shoppingCart"
-										style={{
-											...styles.navLink,
-											...(isActiveMenu('/shoppingCart') ? styles.activeNavLink : {}),
-											display: 'flex',
-											alignItems: 'center'
-										}}
-										onMouseEnter={(e) => {
-											if (!isActiveMenu('/shoppingCart')) {
-												e.target.style.color = '#717fe0';
-											}
-										}}
-										onMouseLeave={(e) => {
-											if (!isActiveMenu('/shoppingCart')) {
-												e.target.style.color = '#333';
-											}
-										}}
-									>
-										Giỏ hàng
-									</Link>
-								</li>
+								{/*<li>*/}
+								{/*	<Link*/}
+								{/*		to="/shoppingCart"*/}
+								{/*		style={{*/}
+								{/*			...styles.navLink,*/}
+								{/*			...(isActiveMenu('/shoppingCart') ? styles.activeNavLink : {}),*/}
+								{/*			display: 'flex',*/}
+								{/*			alignItems: 'center'*/}
+								{/*		}}*/}
+								{/*		onMouseEnter={(e) => {*/}
+								{/*			if (!isActiveMenu('/shoppingCart')) {*/}
+								{/*				e.target.style.color = '#717fe0';*/}
+								{/*			}*/}
+								{/*		}}*/}
+								{/*		onMouseLeave={(e) => {*/}
+								{/*			if (!isActiveMenu('/shoppingCart')) {*/}
+								{/*				e.target.style.color = '#333';*/}
+								{/*			}*/}
+								{/*		}}*/}
+								{/*	>*/}
+								{/*		Giỏ hàng*/}
+								{/*	</Link>*/}
+								{/*</li>*/}
 								<li>
 									<Link
 										to="/aboutUs"
@@ -459,7 +487,7 @@ const Header = () => {
 										}}
 										onMouseEnter={(e) => {
 											if (!isActiveMenu('/aboutUs')) {
-												e.target.style.color = '#717fe0';
+												e.target.style.color = '#ffffff';
 											}
 										}}
 										onMouseLeave={(e) => {
@@ -480,7 +508,7 @@ const Header = () => {
 										}}
 										onMouseEnter={(e) => {
 											if (!isActiveMenu('/contact')) {
-												e.target.style.color = '#717fe0';
+												e.target.style.color = '#ffffff';
 											}
 										}}
 										onMouseLeave={(e) => {
@@ -497,11 +525,31 @@ const Header = () => {
 
 						{/* Right Side Icons */}
 						<div style={styles.iconContainer}>
+
+
+							{/* Search */}
+							{/*<div style={styles.searchContainer}>*/}
+							{/*	<i*/}
+							{/*		className="zmdi zmdi-search"*/}
+							{/*		style={styles.searchIcon}*/}
+							{/*		onClick={handleSearchButtonClick}*/}
+							{/*	></i>*/}
+							{/*	<input*/}
+							{/*		type="text"*/}
+							{/*		name="search-product"*/}
+							{/*		placeholder="Tìm kiếm"*/}
+							{/*		value={searchTerm}*/}
+							{/*		onChange={handleSearchChange}*/}
+							{/*		onKeyDown={handleSearchSubmit}*/}
+							{/*		style={styles.searchInput}*/}
+							{/*		aria-label="Search products"*/}
+							{/*	/>*/}
+							{/*</div>*/}
 							{/* Shopping Cart */}
 							<Link
 								to="/shoppingCart"
 								style={styles.iconItem}
-								onMouseEnter={(e) => e.target.style.color = '#717fe0'}
+								onMouseEnter={(e) => e.target.style.color = '#ffffff'}
 								onMouseLeave={(e) => e.target.style.color = '#333'}
 							>
 								<i className="zmdi zmdi-shopping-cart"></i>
@@ -516,7 +564,7 @@ const Header = () => {
 							<Link
 								to="/account?tab=wishlist"
 								style={styles.iconItem}
-								onMouseEnter={(e) => e.target.style.color = '#717fe0'}
+								onMouseEnter={(e) => e.target.style.color = '#ffffff'}
 								onMouseLeave={(e) => e.target.style.color = '#333'}
 							>
 								<i className="zmdi zmdi-favorite-outline"></i>
@@ -527,55 +575,36 @@ const Header = () => {
 								)}
 							</Link>
 
-							{/* Search */}
-							<div style={styles.searchContainer}>
-								<i
-									className="zmdi zmdi-search"
-									style={styles.searchIcon}
-									onClick={handleSearchButtonClick}
-								></i>
-								<input
-									type="text"
-									name="search-product"
-									placeholder="Tìm kiếm"
-									value={searchTerm}
-									onChange={handleSearchChange}
-									onKeyDown={handleSearchSubmit}
-									style={styles.searchInput}
-									aria-label="Search products"
-								/>
-							</div>
-
-							{/* User Account */}
-							{loggedIn ? (
-								<div style={styles.userAccount}>
-									<i className="zmdi zmdi-account" style={styles.userIcon}></i>
-									<span
-										style={styles.userName}
-										onClick={() => navigate('/account')}
-									>
-										{username}
-									</span>
-									<i
-										className="zmdi zmdi-power"
-										style={styles.logoutBtn}
-										onClick={(e) => {
-											e.stopPropagation();
-											handleLogout();
-										}}
-										onMouseEnter={(e) => e.target.style.color = '#717fe0'}
-										onMouseLeave={(e) => e.target.style.color = '#666'}
-									></i>
-								</div>
-							) : (
-								<div
-									style={styles.userAccount}
-									onClick={() => navigate('/login')}
-								>
-									<i className="zmdi zmdi-account" style={styles.userIcon}></i>
-									<span style={styles.userName}>Đăng nhập</span>
-								</div>
-							)}
+							{/*/!* User Account *!/*/}
+							{/*{loggedIn ? (*/}
+							{/*	<div style={styles.userAccount}>*/}
+							{/*		<i className="zmdi zmdi-account" style={styles.userIcon}></i>*/}
+							{/*		<span*/}
+							{/*			style={styles.userName}*/}
+							{/*			onClick={() => navigate('/account')}*/}
+							{/*		>*/}
+							{/*			{username}*/}
+							{/*		</span>*/}
+							{/*		<i*/}
+							{/*			className="zmdi zmdi-power"*/}
+							{/*			style={styles.logoutBtn}*/}
+							{/*			onClick={(e) => {*/}
+							{/*				e.stopPropagation();*/}
+							{/*				handleLogout();*/}
+							{/*			}}*/}
+							{/*			onMouseEnter={(e) => e.target.style.color = '#ffffff'}*/}
+							{/*			onMouseLeave={(e) => e.target.style.color = '#666'}*/}
+							{/*		></i>*/}
+							{/*	</div>*/}
+							{/*) : (*/}
+							{/*	<div*/}
+							{/*		style={styles.userAccount}*/}
+							{/*		onClick={() => navigate('/login')}*/}
+							{/*	>*/}
+							{/*		<i className="zmdi zmdi-account" style={styles.userIcon}></i>*/}
+							{/*		<span style={styles.userName}>Đăng nhập</span>*/}
+							{/*	</div>*/}
+							{/*)}*/}
 						</div>
 					</nav>
 				</div>
