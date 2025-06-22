@@ -191,18 +191,15 @@ const Header = () => {
 			const userName = localStorage.getItem('userName');
 			const userId = localStorage.getItem('userId');
 
-			console.log("Login check - UserId:", userId);
+			console.log('[Header] Login check:', { token, userName, userId });
 
-			if (token && userName) {
-				setLoggedIn(true);
-				setUsername(userName);
-				setId(userId);
-			} else {
-				setLoggedIn(false);
-				setUsername('');
-				setId('');
-			}
+			const isLogged = token && userName && userId;
+
+			setLoggedIn(isLogged);
+			setUsername(isLogged ? userName : '');
+			setId(isLogged ? userId : '');
 		};
+
 
 		checkLoginStatus();
 		window.addEventListener('storage', checkLoginStatus);

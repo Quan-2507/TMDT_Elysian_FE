@@ -130,9 +130,9 @@ function VerifyRegisterAccount() {
                             <div className="loading-text">Đang xử lý...</div>
                         </div>
                     )}
-                    <div className='img-container'>
-                        <img src={imgHolder} alt='Login img holder'></img>
-                    </div>
+                    {/*<div className='img-container'>*/}
+                    {/*    <img src={imgHolder} alt='Login img holder'></img>*/}
+                    {/*</div>*/}
                     <div className="login-container">
                         <h2>Xác thực tài khoản</h2>
                         <form onSubmit={verifyHandler}>
