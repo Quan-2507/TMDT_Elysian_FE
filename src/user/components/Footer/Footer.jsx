@@ -1,93 +1,123 @@
 import React from 'react';
 
+const styles = {
+	logoName: {
+		color: '#ffffff',
+		textDecoration: 'none',
+		fontSize: '30px',
+		fontWeight: '500',
+		padding: '10px 15px',
+		transition: 'color 0.3s ease',
+		textTransform: 'uppercase',
+		whiteSpace: 'nowrap'
+	}
+};
+
 const Footer = () => {
 	return (
-		<div>
-			<footer className="bg3 p-t-75 p-b-32">
-				<div className="container">
-					<div className="row">
-						<div className="col-sm-6 col-lg-4 p-b-50">
-							<h4 className="stext-301 cl0 p-b-30">GIÚP ĐỠ</h4>
-							<ul>
-								<li className="p-b-10">
-									<a href="#" className="stext-107 cl7 hov-cl1 trans-04">Theo dõi thứ tự</a>
-								</li>
-								<li className="p-b-10">
-									<a href="#" className="stext-107 cl7 hov-cl1 trans-04">Trả lại</a>
-								</li>
-								<li className="p-b-10">
-									<a href="#" className="stext-107 cl7 hov-cl1 trans-04">Đang chuyển hàng</a>
-								</li>
-								<li className="p-b-10">
-									<a href="#" className="stext-107 cl7 hov-cl1 trans-04">Câu hỏi thường gặp</a>
-								</li>
-							</ul>
-						</div>
-						<div className="col-sm-6 col-lg-4 p-b-50">
-							<h4 className="stext-301 cl0 p-b-30">LIÊN LẠC
-							</h4>
-							<p className="stext-107 cl7 size-201">
-							Có thắc mắc gì không? Hãy cho chúng tôi biết tại cửa hàng ở tầng 8, 379 Hudson St, New York, NY 10018 hoặc gọi cho chúng tôi theo số (+1) 96 716 6879							</p>
-							<div className="p-t-27">
-								<a href="#" className="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-									<i className="fa fa-facebook"></i>
-								</a>
-								<a href="#" className="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-									<i className="fa fa-instagram"></i>
-								</a>
-								<a href="#" className="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-									<i className="fa fa-pinterest-p"></i>
-								</a>
-							</div>
-						</div>
-						<div className="col-sm-6 col-lg-4 p-b-50">
-							<h4 className="stext-301 cl0 p-b-30">BẢN TIN
-							</h4>
-							<form>
-								<div className="wrap-input1 w-full p-b-4">
-									<input className="input1 bg-none plh1 stext-107 cl7" type="text" name="email" placeholder="email@example.com" />
-									<div className="focus-input1 trans-04"></div>
-								</div>
-								<div className="p-t-18">
-									<button className="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04">
-									ĐẶT MUA
-									</button>
-								</div>
-							</form>
-						</div>
+		<footer style={{ backgroundColor: '#2973B2', color: '#fff', padding: '50px 0 20px 0', fontSize: '14px' }}>
+			<div className="container" style={{ maxWidth: '1300px', margin: '0 auto', padding: '0 20px' }}>
+				<div className="row" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', margin: '0 auto' }}>
+
+					{/* Cột 1 */}
+					<div style={{ flex: '1 1 180px', marginBottom: '30px' }}>
+						<h4 style={{ fontWeight: 'bold', marginBottom: '15px', fontSize: '13px' }}>THỊ TRƯỜNG ELYSIAN</h4>
+						<ul style={{ listStyle: 'none', padding: 0 }}>
+							<li><a href="#" style={linkStyle}>Điều khoản</a></li>
+							<li><a href="#" style={linkStyle}>Giấy phép</a></li>
+							<li><a href="#" style={linkStyle}>Market API</a></li>
+							<li><a href="#" style={linkStyle}>Trở thành đối tác</a></li>
+							<li><a href="#" style={linkStyle}>Cookies</a></li>
+							<li><a href="#" style={linkStyle}>Cài đặt Cookie</a></li>
+						</ul>
 					</div>
-					<div className="p-t-40">
-						<div className="flex-c-m flex-w p-b-18">
-							<a href="#" className="m-all-1">
-								<img src={`${process.env.PUBLIC_URL}/assets/images/icons/icon-pay-01.png`} alt="ICON-PAY" />
-							</a>
-							<a href="#" className="m-all-1">
-								<img src={`${process.env.PUBLIC_URL}/assets/images/icons/icon-pay-02.png`} alt="ICON-PAY" />
-							</a>
-							<a href="#" className="m-all-1">
-								<img src={`${process.env.PUBLIC_URL}/assets/images/icons/icon-pay-03.png`} alt="ICON-PAY" />
-							</a>
-							<a href="#" className="m-all-1">
-								<img src={`${process.env.PUBLIC_URL}/assets/images/icons/icon-pay-04.png`} alt="ICON-PAY" />
-							</a>
-							<a href="#" className="m-all-1">
-								<img src={`${process.env.PUBLIC_URL}/assets/images/icons/icon-pay-05.png`} alt="ICON-PAY" />
-							</a>
-						</div>
-						<p className="stext-107 cl6 txt-center">
-							{`Bản quyền ©${new Date().getFullYear()}  Bảo lưu mọi quyền | Được thực hiện với `}
-							<i className="fa fa-heart-o" aria-hidden="true"></i>
-							{` bởi `}
-							<a href="https://colorlib.com" target="_blank" rel="noopener noreferrer">Colorlib</a>
-							{` & phân phối bởi `}
-							<a href="https://themewagon.com" target="_blank" rel="noopener noreferrer">ThemeWagon</a>
-						</p>
+
+					{/* Cột 2 */}
+					<div style={{ flex: '1 1 180px', marginBottom: '30px' }}>
+						<h4 style={{ fontWeight: 'bold', marginBottom: '15px', fontSize: '13px' }}>HỖ TRỢ</h4>
+						<ul style={{ listStyle: 'none', padding: 0 }}>
+							<li><a href="#" style={linkStyle}>Trung tâm trợ giúp</a></li>
+							<li><a href="#" style={linkStyle}>Tác giả</a></li>
+						</ul>
+					</div>
+
+					{/* Cột 3 */}
+					<div style={{ flex: '1 1 180px', marginBottom: '30px' }}>
+						<h4 style={{ fontWeight: 'bold', marginBottom: '15px', fontSize: '13px' }}>CỘNG ĐỒNG</h4>
+						<ul style={{ listStyle: 'none', padding: 0 }}>
+							<li><a href="#" style={linkStyle}>Cộng đồng</a></li>
+							<li><a href="#" style={linkStyle}>Blog</a></li>
+							<li><a href="#" style={linkStyle}>Diễn đàn</a></li>
+							<li><a href="#" style={linkStyle}>Gặp gỡ</a></li>
+						</ul>
+					</div>
+
+					{/* Cột 4 */}
+					<div style={{ flex: '1 1 200px', marginBottom: '30px' }}>
+						<h4 style={{ fontWeight: 'bold', marginBottom: '15px', fontSize: '13px' }}>GIỚI THIỆU</h4>
+						<ul style={{ listStyle: 'none', padding: 0 }}>
+							<li><a href="#" style={linkStyle}>Về Elysian</a></li>
+							<li><a href="#" style={linkStyle}>Tuyển dụng</a></li>
+							<li><a href="#" style={linkStyle}>Chính sách bảo mật</a></li>
+							<li><a href="#" style={linkStyle}>Không bán hoặc chia sẻ thông tin cá nhân</a></li>
+							<li><a href="#" style={linkStyle}>Sơ đồ trang</a></li>
+						</ul>
+					</div>
+
+					{/* Thống kê và logo */}
+					<div style={{flex: '1 1 250px', marginBottom: '30px', color: '#ccc'}}>
+						<img
+							src={`${process.env.PUBLIC_URL}/assets/images/icons/logo-Elysian-by-Gamuda-Land-BG.webp`}
+							alt="Logo Elysian"
+							style={{marginBottom: '10px', maxWidth: '32.5px'}}
+						/><a style={styles.logoName}>ELYSIAN</a>
+						<img
+							src={`${process.env.PUBLIC_URL}/assets/images/icons/Certified_B_Corporation_B_Corp_Logo_2022_Black_RGB.svg.png`}
+							alt="Chứng nhận B Corp"
+							style={{marginTop: '10px', maxWidth: '50px'}}
+						/>
+						<p><strong style={{color: '#fff'}}>77,455,192</strong> <a style={{color: '#cccccc'}}>sản phẩm đã bán</a></p>
+						<p><strong style={{color: '#fff'}}>$1,217,125,427</strong> <a style={{color: '#cccccc'}}>doanh thu cộng đồng</a></p>
 					</div>
 				</div>
-			</footer>
-		</div>
+
+				<hr style={{borderColor: '#333'}}/>
+
+				<div style={{
+					display: 'flex',
+					flexWrap: 'wrap',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					paddingTop: '20px'
+				}}>
+					<div style={{color: '#aaa', fontSize: '13px' }}>
+						© {new Date().getFullYear()} Elysian. Thương hiệu và bản quyền thuộc về các chủ sở hữu tương ứng.
+					</div>
+					<div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
+						<a href="#" style={iconStyle}><i className="fa fa-twitter"></i></a>
+						<a href="#" style={iconStyle}><i className="fa fa-facebook"></i></a>
+						<a href="#" style={iconStyle}><i className="fa fa-youtube"></i></a>
+						<a href="#" style={iconStyle}><i className="fa fa-instagram"></i></a>
+						<a href="#" style={iconStyle}><i className="fa fa-pinterest"></i></a>
+					</div>
+				</div>
+			</div>
+		</footer>
 	);
 };
 
-export default Footer;
+const linkStyle = {
+	color: '#ccc',
+	textDecoration: 'none',
+	display: 'block',
+	marginBottom: '8px',
+	transition: 'color 0.3s ease'
+};
 
+const iconStyle = {
+	color: '#ccc',
+	fontSize: '18px',
+	transition: 'color 0.3s ease'
+};
+
+export default Footer;
