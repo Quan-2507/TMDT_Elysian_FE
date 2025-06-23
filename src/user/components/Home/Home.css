@@ -32,8 +32,46 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%);
+    background: linear-gradient(135deg, rgba(147, 147, 147, 0.6) 0%, rgba(170, 170, 170, 0.3) 100%);
     border-radius: 15px;
+}
+.search-box {
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    background: white;
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 15px 20px;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+    color: #333;
+}
+
+.search-box input::placeholder {
+    color: #aaa;
+}
+
+.search-box button {
+    background-color: #2f80ed; /* Màu xanh như trong ảnh */
+    color: white;
+    border: none;
+    padding: 0 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.search-box button:hover {
+    background-color: #2563c9;
 }
 
 .banner-content {
@@ -46,7 +84,7 @@
 }
 
 .main-banner-title {
-    font-size: 3.5rem;
+    font-size: 2rem;
     font-weight: 800;
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);

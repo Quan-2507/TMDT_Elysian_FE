@@ -23,7 +23,7 @@ const ShoppingCart = () => {
 	const [processing, setProcessing] = useState(false);
 
 	// Phí vận chuyển cố định
-	const shippingFee = 30000;
+	// const shippingFee = 30000;
 
 	useEffect(() => {
 		dispatch(loadCart());
@@ -33,7 +33,7 @@ const ShoppingCart = () => {
 		const fetchProductDetails = async () => {
 			try {
 				setLoading(true);
-				const detailsPromises = cart.map(item => 
+				const detailsPromises = cart.map(item =>
 					getProductById(item.id).then(product => ({
 						id: item.id,
 						name: product.name,
@@ -43,13 +43,13 @@ const ShoppingCart = () => {
 						inStock: product.inStock
 					}))
 				);
-				
+
 				const details = await Promise.all(detailsPromises);
 				const detailsObject = details.reduce((acc, product) => {
 					acc[product.id] = product;
 					return acc;
 				}, {});
-				
+
 				setProductDetails(detailsObject);
 				setLoading(false);
 			} catch (error) {
@@ -69,7 +69,7 @@ const ShoppingCart = () => {
 	const handleIncreaseQuantity = (id, size) => {
 		const item = cart.find(item => item.id === id && item.size === size);
 		const product = productDetails[id];
-		
+
 		if (item && product) {
 			if (item.quantity >= product.quantity) {
 				Swal.fire({
@@ -81,7 +81,7 @@ const ShoppingCart = () => {
 				});
 				return;
 			}
-			
+
 			dispatch(updateQuantity(id, item.quantity + 1, item.size, item.color, item.size));
 		}
 	};
@@ -96,7 +96,7 @@ const ShoppingCart = () => {
 	const handleRemoveItem = (id, size) => {
 		console.log('handleRemoveItem called with:', { id, size });
 		console.log('Current cart:', cart);
-		
+
 		Swal.fire({
 			title: 'Xác nhận xóa',
 			text: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
@@ -110,7 +110,7 @@ const ShoppingCart = () => {
 			if (result.isConfirmed) {
 				console.log('User confirmed removal, dispatching removeFromCart with:', { id, size });
 				dispatch(removeFromCart(id, size));
-				
+
 				Swal.fire({
 					title: 'Đã xóa!',
 					text: 'Sản phẩm đã được xóa khỏi giỏ hàng.',
@@ -152,50 +152,50 @@ const ShoppingCart = () => {
 			setProcessing(true);
 			setCouponError('');
 			setCouponSuccess('');
-			
+
 			// Calculate subtotal first
 			const subtotal = calculateSubtotal();
 			console.log(`Attempting to validate discount code: ${couponCode} for subtotal: ${subtotal}`);
-			
+
 			// Call the validate API directly with orderTotal
 			const discountAmount = await discountCodeApi.validateDiscountCode(
 				couponCode,
 				subtotal.toString(), // orderTotal as string
 				localStorage.getItem('userId') // userId (optional)
 			);
-			
+
 			console.log('Discount validation response:', discountAmount);
-			
+
 			// The API returns the calculated discount amount directly
 			if (typeof discountAmount === 'number' || typeof discountAmount === 'string') {
 				const finalDiscountAmount = parseFloat(discountAmount);
 				console.log(`Final discount amount: ${finalDiscountAmount}`);
-				
+
 				setDiscount(finalDiscountAmount);
 				setValidDiscountCode(couponCode);
 				setCouponSuccess('Áp dụng mã giảm giá thành công!');
 			} else {
 				throw new Error('Invalid discount amount returned');
 			}
-			
+
 		} catch (error) {
 			console.error('Error applying discount code:', error);
 			setDiscount(0);
 			setValidDiscountCode(null);
-			
+
 			// Default error message
 			let errorMessage = 'Mã giảm giá không hợp lệ hoặc đã hết hạn';
-			
+
 			if (error.response) {
 				console.log('Error response:', error.response);
-				
+
 				// Handle structured error response
 				if (error.response.data) {
 					if (typeof error.response.data === 'string') {
 						errorMessage = error.response.data;
 					} else if (error.response.data.message) {
 						errorMessage = error.response.data.message;
-						
+
 						// Use specific error code handling for better UX
 						if (error.response.data.code) {
 							console.log('Error code:', error.response.data.code);
@@ -231,7 +231,7 @@ const ShoppingCart = () => {
 					}
 				}
 			}
-			
+
 			setCouponError(errorMessage);
 		} finally {
 			setProcessing(false);
@@ -248,7 +248,7 @@ const ShoppingCart = () => {
 		if (item && newSize) {
 			dispatch(updateQuantity(id, item.quantity, newSize, item.color, currentSize));
 			setEditingSizeItemId(null);
-			
+
 			Swal.fire({
 				title: 'Cập nhật thành công!',
 				text: `Đã thay đổi size thành ${newSize}`,
@@ -262,8 +262,8 @@ const ShoppingCart = () => {
 	// Tính tổng cộng
 	const calculateTotal = () => {
 		const subtotal = calculateSubtotal();
-		console.log(`Calculating total: Subtotal ${subtotal} - Discount ${discount} + Shipping ${shippingFee} = ${subtotal + shippingFee - discount}`);
-		return subtotal + shippingFee - discount;
+		console.log(`Calculating total: Subtotal ${subtotal} - Discount ${discount}  = ${subtotal  - discount}`);
+		return subtotal + - discount;
 	};
 
 	// Show loading state
@@ -277,12 +277,16 @@ const ShoppingCart = () => {
 	}
 
 	return (
+
 		<div className="container p-t-100 p-b-85">
+			<h1 style={{textAlign:"center",marginBottom:"20px"}}>Giỏ hàng</h1>
 			{cart.length === 0 ? (
 				<div className="text-center p-t-50 p-b-50">
 					<h2>Giỏ hàng của bạn đang trống</h2>
 					<p className="p-t-20">Bạn chưa có sản phẩm nào trong giỏ hàng.</p>
-					<Link to="/product" className="flex-c-m stext-101 cl0 size-107 bg1 bor2 hov-btn1 p-lr-15 trans-04 m-tb-10 m-lr-auto" style={{ width: "200px", marginTop: "20px" }}>
+					<Link to="/product"
+						  className="flex-c-m stext-101 cl0 size-107 bg1 bor2 hov-btn1 p-lr-15 trans-04 m-tb-10 m-lr-auto"
+						  style={{width: "200px", marginTop: "20px"}}>
 						Tiếp tục mua sắm
 					</Link>
 				</div>
@@ -291,125 +295,70 @@ const ShoppingCart = () => {
 					<div className="col-lg-10 col-xl-7 m-lr-auto m-b-50">
 						<div className="m-l-25 m-r--38 m-lr-0-xl">
 							<div className="wrap-table-shopping-cart">
+								<div ></div>
 								<table className="table-shopping-cart">
 									<thead>
-										<tr className="table_head">
-											<th className="column-1">Sản phẩm</th>
-											<th className="column-2"></th>
-											<th className="column-3">Giá</th>
-											<th className="column-4">Số lượng</th>
-											<th className="column-5">Tổng</th>
-											<th className="column-6"></th>
-										</tr>
+									<tr className="table_head">
+										<th className="column-1">Sản phẩm</th>
+										<th className="column-2"></th>
+										<th className="column-3"></th>
+										<th className="column-4"></th>
+										<th className="column-5">Giá</th>
+										<th className="column-6"></th>
+									</tr>
 									</thead>
 									<tbody>
-										{cart.map(item => {
-											const product = productDetails[item.id];
-											if (!product) return null;
-											
-											// Lấy danh sách size có sẵn cho sản phẩm
-											const rawSizes = findProductSizesById(item.id);
-											const availableSizes = Array.isArray(rawSizes) ? rawSizes : ['S', 'M', 'L', 'XL'];
-											
-											console.log('Product ID:', item.id, 'Raw sizes:', rawSizes, 'Available sizes:', availableSizes);
-											
-											return (
-												<tr className="table_row" key={`${item.id}-${item.size}`}>
-													<td className="column-1">
-														<div className="how-itemcart1">
-															<img src={product.img} alt={product.name} />
-														</div>
-													</td>
-													<td className="column-2">
-														<div>
-															<Link to={`/product/${item.id}`} className="product-name">{product.name}</Link>
-															<div className="product-options">
-																{editingSizeItemId === `${item.id}-${item.size}` ? (
-																	<div className="size-selector">
-																		<select 
-																			className="form-select size-select"
-																			value={item.size || ''}
-																			onChange={(e) => handleSizeChange(item.id, e.target.value, item.size)}
-																		>
-																			<option value="">Chọn size</option>
-																			{availableSizes.map(size => (
-																				<option key={size} value={size}>{size}</option>
-																			))}
-																		</select>
-																		<button 
-																			className="cancel-edit-btn"
-																			onClick={() => setEditingSizeItemId(null)}
-																		>
-																			<i className="zmdi zmdi-close"></i>
-																		</button>
-																	</div>
-																) : (
-																	<div className="product-size">
-																		Size: {item.size || 'Standard'}
-																		<button 
-																			className="edit-size-btn"
-																			onClick={() => handleStartEditSize(item.id, item.size)}
-																		>
-																			<i className="zmdi zmdi-edit"></i>
-																		</button>
-																	</div>
-																)}
-															</div>
-														</div>
-													</td>
-													<td className="column-3">
-														{product.price.toLocaleString()} VND
-													</td>
-													<td className="column-4">
-														<div className="wrap-num-product flex-w">
-															<div 
-																className="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
-																onClick={() => handleDecreaseQuantity(item.id, item.size)}
-															>
-																<i className="fs-16 zmdi zmdi-minus"></i>
-															</div>
+									{cart.map(item => {
+										const product = productDetails[item.id];
+										if (!product) return null;
 
-															<input className="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value={item.quantity} readOnly />
+										// Lấy danh sách size có sẵn cho sản phẩm
+										const rawSizes = findProductSizesById(item.id);
+										const availableSizes = Array.isArray(rawSizes) ? rawSizes : ['S', 'M', 'L', 'XL'];
 
-															<div 
-																className="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
-																onClick={() => handleIncreaseQuantity(item.id, item.size)}
-															>
-																<i className="fs-16 zmdi zmdi-plus"></i>
-															</div>
-														</div>
-													</td>
-													<td className="column-5">
-														{(product.price * item.quantity).toLocaleString()} VND
-													</td>
-													<td className="column-6">
-														<button 
-															className="remove-item-btn"
-															onClick={() => handleRemoveItem(item.id, item.size)}
-														>
-															<i className="zmdi zmdi-close"></i>
-														</button>
-													</td>
-												</tr>
-											);
-										})}
+										console.log('Product ID:', item.id, 'Raw sizes:', rawSizes, 'Available sizes:', availableSizes);
+
+										return (
+											<tr className="table_row" key={`${item.id}-${item.size}`}>
+												<td className="column-1">
+													<div className="how-itemcart1">
+														<img src={product.img} alt={product.name}/>
+													</div>
+												</td>
+												<th className="column-2"></th>
+												<th className="column-3"></th>
+												<th className="column-4"></th>
+												<td className="column-5">
+													{product.price.toLocaleString()} VND
+												</td>
+												<td className="column-6" style={{paddingRight:"20px"}}>
+													<button
+														className="remove-item-btn"
+														onClick={() => handleRemoveItem(item.id, item.size)}
+													>
+														<i className="zmdi zmdi-close"></i>
+													</button>
+												</td>
+											</tr>
+										);
+									})}
 									</tbody>
 								</table>
 							</div>
 
 							<div className="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
 								<div className="flex-w flex-m m-r-20 m-tb-5">
-									<input 
-										className="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" 
-										type="text" 
-										name="coupon" 
-										placeholder="Mã giảm giá" 
+									<input
+										className="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5"
+										type="text"
+										name="coupon"
+										placeholder="Mã giảm giá"
 										value={couponCode}
 										onChange={(e) => setCouponCode(e.target.value)}
 										disabled={processing || validDiscountCode !== null}
 									/>
 									{validDiscountCode ? (
-										<div 
+										<div
 											className="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5"
 											onClick={() => {
 												setValidDiscountCode(null);
@@ -421,7 +370,7 @@ const ShoppingCart = () => {
 											Xóa mã
 										</div>
 									) : (
-										<div 
+										<div
 											className={`flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5 ${processing ? 'disabled-btn' : ''}`}
 											onClick={!processing ? handleApplyCoupon : undefined}
 										>
@@ -432,7 +381,8 @@ const ShoppingCart = () => {
 								{validDiscountCode && (
 									<div className="flex-w flex-m m-r-20 m-tb-5">
 										<div className="discount-applied-badge">
-											<i className="zmdi zmdi-check-circle"></i> Mã giảm giá đã áp dụng: {validDiscountCode}
+											<i className="zmdi zmdi-check-circle"></i> Mã giảm giá đã áp
+											dụng: {validDiscountCode}
 										</div>
 										<div className="discount-amount">
 											-{discount.toLocaleString()} VND
@@ -451,7 +401,7 @@ const ShoppingCart = () => {
 
 					<div className="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
 						<div className="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
-							<h4 className="mtext-109 cl2 p-b-30">
+							<h4 className="mtext-109 cl2 p-b-30" style={{textAlign:"center"}}>
 								Tổng Giỏ Hàng
 							</h4>
 
@@ -471,19 +421,19 @@ const ShoppingCart = () => {
 							</div>
 
 							{/* Phí vận chuyển */}
-							<div className="flex-w flex-t bor12 p-t-15 p-b-15">
-								<div className="size-208">
-									<span className="stext-110 cl2">
-										Phí vận chuyển:
-									</span>
-								</div>
+							{/*<div className="flex-w flex-t bor12 p-t-15 p-b-15">*/}
+							{/*	<div className="size-208">*/}
+							{/*		<span className="stext-110 cl2">*/}
+							{/*			Phí vận chuyển:*/}
+							{/*		</span>*/}
+							{/*	</div>*/}
 
-								<div className="size-209">
-									<span className="mtext-110 cl2">
-										{shippingFee.toLocaleString()} VND
-									</span>
-								</div>
-							</div>
+							{/*	<div className="size-209">*/}
+							{/*		<span className="mtext-110 cl2">*/}
+							{/*			{shippingFee.toLocaleString()} VND*/}
+							{/*		</span>*/}
+							{/*	</div>*/}
+							{/*</div>*/}
 
 							{/* Mã giảm giá */}
 							{discount > 0 && (
@@ -517,9 +467,10 @@ const ShoppingCart = () => {
 								</div>
 							</div>
 
-							<button 
+							<button
 								onClick={handleCheckout}
-								className="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
+								style={{background:"#5CB85C",borderRadius:"5px"}}
+								className="flex-c-m stext-101 cl0 size-116 bg3  hov-btn3 p-lr-15 trans-04 pointer"
 							>
 								Thanh toán
 							</button>
@@ -528,15 +479,18 @@ const ShoppingCart = () => {
 				</div>
 			)}
 			<style jsx>{`
+				
 				.product-options {
 					margin-top: 5px;
 				}
+
 				.product-size {
 					display: flex;
 					align-items: center;
 					color: #888;
 					font-size: 14px;
 				}
+
 				.edit-size-btn {
 					background: none;
 					border: none;
@@ -545,13 +499,16 @@ const ShoppingCart = () => {
 					cursor: pointer;
 					font-size: 16px;
 				}
+
 				.edit-size-btn:hover {
 					color: #333;
 				}
+
 				.size-selector {
 					display: flex;
 					align-items: center;
 				}
+
 				.size-select {
 					width: auto;
 					min-width: 100px;
@@ -560,31 +517,37 @@ const ShoppingCart = () => {
 					border-radius: 4px;
 					margin-right: 8px;
 				}
+
 				.cancel-edit-btn {
 					background: none;
 					border: none;
 					color: #888;
 					cursor: pointer;
 				}
+
 				.coupon-error {
 					color: #e65540;
 					font-size: 14px;
 					width: 100%;
 					text-align: center;
 				}
+
 				.coupon-success {
 					color: #28a745;
 					font-size: 14px;
 					width: 100%;
 					text-align: center;
 				}
+
 				.text-danger {
 					color: #e65540;
 				}
+
 				.disabled-btn {
 					opacity: 0.6;
 					cursor: not-allowed;
 				}
+
 				.discount-applied-badge {
 					display: flex;
 					align-items: center;
@@ -597,17 +560,17 @@ const ShoppingCart = () => {
 					margin-bottom: 10px;
 					width: 100%;
 				}
-				
+
 				.discount-applied-badge i {
 					margin-right: 8px;
 					font-size: 16px;
 				}
-				
+
 				.discount-amount {
 					font-weight: bold;
 					color: #e65540;
 				}
-				
+
 				.discount-text {
 					color: #e65540;
 				}
@@ -624,7 +587,9 @@ const cartStyles = `
 		gap: 8px;
 		margin-top: 8px;
 	}
-	
+	.column-1{
+		width: 50%;
+	}
 	.size-select {
 		padding: 4px 8px;
 		border: 1px solid #ddd;
