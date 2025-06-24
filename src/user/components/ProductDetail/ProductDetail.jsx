@@ -1,4 +1,3 @@
-// src/components/ProductDetail.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,13 +17,11 @@ const ProductDetail = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const cart = useSelector(state => state.cart);
-	const [quantity, setQuantity] = useState(1);
-	const [selectedSize, setSelectedSize] = useState('');
 	const [showZoom, setShowZoom] = useState(false);
 	const [isInWishlist, setIsInWishlist] = useState(false);
 	const [productSizes, setProductSizes] = useState([]);
 	const [loadingSizes, setLoadingSizes] = useState(false);
-	
+
 	// Fetch product details from API
 	useEffect(() => {
 		const fetchProductDetails = async () => {
@@ -32,13 +29,13 @@ const ProductDetail = () => {
 				setLoading(true);
 				const data = await getProductById(parseInt(id));
 				setProduct(data);
-				
+
 				// Fetch sizes for this product
 				await fetchProductSizes(parseInt(id));
-				
+
 				// Kiểm tra xem sản phẩm có trong wishlist không
 				checkWishlistStatus(parseInt(id));
-				
+
 				setLoading(false);
 			} catch (error) {
 				setError("Không thể tải thông tin sản phẩm. Vui lòng thử lại sau.");
@@ -49,17 +46,15 @@ const ProductDetail = () => {
 
 		fetchProductDetails();
 	}, [id]);
-	
+
 	// Kiểm tra trạng thái wishlist
 	const checkWishlistStatus = async (productId) => {
 		const token = localStorage.getItem('token');
 		const userId = localStorage.getItem('userId');
-		
+
 		if (!token || !userId) return;
-		
+
 		try {
-			console.log("Checking wishlist status for product:", productId, "and user:", userId);
-			
 			const response = await axios.get(
 				`${BACKEND_URL_HTTP}/api/wishlist/check?userId=${userId}&productId=${productId}`,
 				{
@@ -68,30 +63,23 @@ const ProductDetail = () => {
 					}
 				}
 			);
-			
-			console.log("Wishlist check response:", response.data);
-			
+
 			if (response.status === 200) {
 				setIsInWishlist(response.data);
 			}
 		} catch (error) {
 			console.error('Error checking wishlist status:', error);
-			console.error('Error details:', error.response?.data || error.message);
 		}
 	};
-	
+
 	// Add to wishlist
 	const handleAddToWishlist = async (e) => {
-		if (e) e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
-		
+		if (e) e.preventDefault();
+
 		const token = localStorage.getItem('token');
 		const userId = localStorage.getItem('userId');
-		
-		console.log("Token available:", !!token);
-		console.log("UserId:", userId);
-		
+
 		if (!token || !userId) {
-			// Người dùng chưa đăng nhập
 			Swal.fire({
 				title: 'Yêu cầu đăng nhập',
 				text: 'Vui lòng đăng nhập để thêm sản phẩm vào danh sách yêu thích',
@@ -107,15 +95,11 @@ const ProductDetail = () => {
 			});
 			return;
 		}
-		
+
 		try {
-			console.log("Calling wishlist API with method:", isInWishlist ? "DELETE" : "POST");
-			console.log("Token being sent:", token.substring(0, 10) + "...");
-			console.log("UserId being used:", userId);
 			let response;
-			
+
 			if (isInWishlist) {
-				// Xóa khỏi wishlist
 				response = await axios.delete(
 					`${BACKEND_URL_HTTP}/api/wishlist/remove/${product.id}?userId=${userId}`,
 					{
@@ -125,10 +109,9 @@ const ProductDetail = () => {
 						}
 					}
 				);
-				
+
 				if (response.status === 200) {
 					setIsInWishlist(false);
-					// Dispatch wishlist update event
 					window.dispatchEvent(new Event('wishlist-update'));
 					Swal.fire({
 						title: 'Đã xóa',
@@ -139,13 +122,6 @@ const ProductDetail = () => {
 					});
 				}
 			} else {
-				// Thêm vào wishlist
-				console.log("Sending request to add to wishlist:", {
-					productId: product.id,
-					userId: parseInt(userId),
-					endpoint: `${BACKEND_URL_HTTP}/api/wishlist/add`
-				});
-				
 				response = await axios.post(
 					`${BACKEND_URL_HTTP}/api/wishlist/add`,
 					{
@@ -160,10 +136,9 @@ const ProductDetail = () => {
 						withCredentials: true
 					}
 				);
-				
+
 				if (response.status === 200 || response.status === 201) {
 					setIsInWishlist(true);
-					// Dispatch wishlist update event
 					window.dispatchEvent(new Event('wishlist-update'));
 					Swal.fire({
 						title: 'Đã thêm',
@@ -174,12 +149,7 @@ const ProductDetail = () => {
 					});
 				}
 			}
-			
-			console.log("API response:", response);
 		} catch (error) {
-			console.error('Error updating wishlist:', error);
-			console.error('Error details:', error.response?.data || error.message);
-			
 			Swal.fire({
 				title: 'Lỗi',
 				text: 'Không thể cập nhật danh sách yêu thích. Vui lòng thử lại sau.',
@@ -188,24 +158,19 @@ const ProductDetail = () => {
 			});
 		}
 	};
-	
+
 	// Toggle zoom image modal and control header visibility
 	const toggleZoom = () => {
 		const newZoomState = !showZoom;
 		setShowZoom(newZoomState);
-		
-		// Get the header element and toggle its visibility
+
 		const header = document.querySelector('header');
 		if (header) {
 			if (newZoomState) {
-				// Hide header when zoom is shown
 				header.style.display = 'none';
-				// Also lock body scrolling
 				document.body.style.overflow = 'hidden';
 			} else {
-				// Show header when zoom is closed
 				header.style.display = '';
-				// Restore body scrolling
 				document.body.style.overflow = '';
 			}
 		}
@@ -214,7 +179,7 @@ const ProductDetail = () => {
 	// Close modal when clicking outside image
 	const handleCloseZoom = (e) => {
 		if (e.target.classList.contains('zoom-modal')) {
-			toggleZoom(); // Use toggleZoom to ensure header visibility is also toggled
+			toggleZoom();
 		}
 	};
 
@@ -222,15 +187,13 @@ const ProductDetail = () => {
 	useEffect(() => {
 		const handleEsc = (e) => {
 			if (e.keyCode === 27 && showZoom) {
-				toggleZoom(); // Use toggleZoom to ensure header visibility is also toggled
+				toggleZoom();
 			}
 		};
 		window.addEventListener('keydown', handleEsc);
-		
-		// Cleanup function
+
 		return () => {
 			window.removeEventListener('keydown', handleEsc);
-			// Ensure header is visible when component unmounts if it was hidden
 			if (showZoom) {
 				const header = document.querySelector('header');
 				if (header) {
@@ -254,57 +217,17 @@ const ProductDetail = () => {
 			return;
 		}
 
-		// Kiểm tra nếu chưa chọn size
-		if (!selectedSize) {
-			Swal.fire({
-				title: 'Vui lòng chọn kích thước!',
-				text: 'Bạn cần chọn kích thước trước khi thêm sản phẩm vào giỏ hàng.',
-				icon: 'warning',
-				confirmButtonText: 'Đã hiểu',
-				confirmButtonColor: '#e65540'
-			});
-			return;
-		}
-
-		// Kiểm tra số lượng tồn kho của size cụ thể
-		const sizeInfo = productSizes.find(s => s.size === selectedSize);
-		if (sizeInfo && quantity > sizeInfo.quantity) {
-			Swal.fire({
-				title: 'Vượt quá số lượng tồn kho!',
-				text: `Số lượng bạn yêu cầu (${quantity}) vượt quá số lượng size ${selectedSize} còn lại trong kho (${sizeInfo.quantity}). Vui lòng giảm số lượng.`,
-				icon: 'warning',
-				confirmButtonText: 'Đã hiểu',
-				confirmButtonColor: '#e65540'
-			});
-			return;
-		}
-
 		const productToAdd = {
 			id: parseInt(id),
-			quantity: quantity,
-			size: selectedSize,
+			quantity: 1,
 		};
 
-		// Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng với cùng size
-		const existingItem = cart.find(item => 
-			item.id === productToAdd.id && item.size === productToAdd.size
-		);
+		// Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
+		const existingItem = cart.find(item => item.id === productToAdd.id);
 
 		if (existingItem) {
-			// Kiểm tra tổng số lượng sau khi thêm có vượt quá số lượng tồn kho của size không
-			if (sizeInfo && existingItem.quantity + quantity > sizeInfo.quantity) {
-				Swal.fire({
-					title: 'Vượt quá số lượng tồn kho!',
-					text: `Tổng số lượng trong giỏ hàng (${existingItem.quantity + quantity}) sẽ vượt quá số lượng size ${selectedSize} còn lại trong kho (${sizeInfo.quantity}).`,
-					icon: 'warning',
-					confirmButtonText: 'Đã hiểu',
-					confirmButtonColor: '#e65540'
-				});
-				return;
-			}
-
 			const message = 'Sản phẩm đã có trong giỏ hàng. Bạn có muốn xem giỏ hàng không?';
-			
+
 			Swal.fire({
 				title: 'Sản phẩm đã tồn tại',
 				text: message,
@@ -318,12 +241,12 @@ const ProductDetail = () => {
 					navigate('/cart');
 				}
 			});
-			
+
 			return;
 		}
-		
+
 		dispatch(addToCart(productToAdd));
-		
+
 		Swal.fire({
 			title: 'Thêm vào giỏ hàng thành công!',
 			text: 'Bạn có muốn đến trang giỏ hàng không?',
@@ -337,18 +260,6 @@ const ProductDetail = () => {
 				navigate('/cart');
 			}
 		});
-	};
-
-	const decreaseQuantity = () => {
-		if (quantity > 1) {
-			setQuantity(quantity - 1);
-		}
-	};
-
-	const increaseQuantity = () => {
-		if (quantity < product.quantity) {
-			setQuantity(quantity + 1);
-		}
 	};
 
 	// Hàm lấy thông tin size từ API
@@ -395,19 +306,19 @@ const ProductDetail = () => {
 						<div className="col-md-6 col-lg-7 p-b-30">
 							<div className="p-l-25 p-r-30 p-lr-0-lg">
 								<div className="wrap-pic-w pos-relative">
-									<img 
-										src={product.img} 
-										alt={product.name} 
-										style={{ 
-											height: '600px', 
-											width: '100%', 
+									<img
+										src={product.img}
+										alt={product.name}
+										style={{
+											height: '600px',
+											width: '100%',
 											objectFit: 'contain',
-											cursor: 'pointer' 
-										}} 
+											cursor: 'pointer'
+										}}
 										onClick={toggleZoom}
 									/>
-									<a 
-										className="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" 
+									<a
+										className="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
 										onClick={toggleZoom}
 										style={{ cursor: 'pointer' }}
 									>
@@ -435,15 +346,6 @@ const ProductDetail = () => {
 								<span className="mtext-106 cl2">
                                     {product.price.toLocaleString()} VND
                                 </span>
-                                <div className="product-quantity mt-2">
-									<span className="stock-info">
-										{product.inStock ? (
-											<>Còn <span className="quantity-number">{product.quantity}</span> sản phẩm</>
-										) : (
-											<span className="out-of-stock-text">Hết hàng</span>
-										)}
-									</span>
-								</div>
 								<p className="stext-102 cl3 p-t-23">
 									{product.des}
 								</p>
@@ -462,85 +364,10 @@ const ProductDetail = () => {
 										</div>
 									</div>
 
-									{/* Size Selection */}
+									{/* Add to Cart Button */}
 									<div className="flex-w flex-r-m p-b-10">
-										<div className="size-203 flex-c-m respon6">
-											Kích thước
-										</div>
-										<div className="size-204 respon6-next">
-											<div className="rs1-select2 bor8 bg0">
-												{loadingSizes ? (
-													<div className="loading-sizes">Đang tải...</div>
-												) : (
-													<>
-														<select 
-															className="form-control" 
-															value={selectedSize} 
-															onChange={(e) => setSelectedSize(e.target.value)}
-															required
-														>
-															<option value="">Chọn kích thước</option>
-															{productSizes.map((sizeInfo) => (
-																<option 
-																	key={sizeInfo.id} 
-																	value={sizeInfo.size}
-																	disabled={!sizeInfo.active || sizeInfo.quantity <= 0}
-																>
-																	{sizeInfo.size} {sizeInfo.quantity > 0 ? `(còn ${sizeInfo.quantity})` : "(hết hàng)"}
-																</option>
-															))}
-														</select>
-														<div className="size-info">
-															{productSizes.length === 0 && !loadingSizes && (
-																<span className="no-sizes">Không có kích thước nào cho sản phẩm này</span>
-															)}
-														</div>
-													</>
-												)}
-											</div>
-										</div>
-									</div>
-
-									{/* Quantity */}
-									<div className="flex-w flex-r-m p-b-10">
-										<div className="size-203 flex-c-m respon6">
-											Số lượng
-										</div>
 										<div className="size-204 flex-w flex-m respon6-next">
-											<div className="wrap-num-product flex-w m-r-20 m-tb-10">
-												<div 
-													className={`btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m ${!product.inStock ? 'disabled' : ''}`}
-													onClick={product.inStock ? decreaseQuantity : undefined}
-												>
-													<i className="fs-16 zmdi zmdi-minus"></i>
-												</div>
-
-												<input 
-													className="mtext-104 cl3 txt-center num-product" 
-													type="number" 
-													name="num-product" 
-													value={quantity}
-													onChange={(e) => {
-														if (product.inStock) {
-															const newQuantity = parseInt(e.target.value) || 1;
-															// Đảm bảo số lượng không vượt quá tồn kho
-															setQuantity(Math.min(newQuantity, product.quantity));
-														}
-													}}
-													min="1"
-													max={product.quantity}
-													disabled={!product.inStock}
-												/>
-
-												<div 
-													className={`btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m ${!product.inStock ? 'disabled' : ''}`}
-													onClick={product.inStock ? increaseQuantity : undefined}
-												>
-													<i className="fs-16 zmdi zmdi-plus"></i>
-												</div>
-											</div>
-
-											<button 
+											<button
 												className={`flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail ${!product.inStock ? 'btn-disabled' : ''}`}
 												onClick={handleAddToCart}
 												disabled={!product.inStock}
@@ -552,11 +379,11 @@ const ProductDetail = () => {
 								</div>
 								<div className="flex-w flex-m p-l-100 p-t-40 respon7">
 									<div className="flex-m bor9 p-r-10 m-r-11">
-										<button 
-											onClick={handleAddToWishlist} 
+										<button
+											onClick={handleAddToWishlist}
 											className="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100"
 											data-tooltip={isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
-											style={{ 
+											style={{
 												cursor: 'pointer',
 												background: 'transparent',
 												border: 'none',
@@ -590,8 +417,8 @@ const ProductDetail = () => {
 
 			{/* Zoom Image Modal */}
 			{showZoom && (
-				<div 
-					className="zoom-modal" 
+				<div
+					className="zoom-modal"
 					onClick={handleCloseZoom}
 					style={{
 						position: 'fixed',
@@ -607,17 +434,17 @@ const ProductDetail = () => {
 					}}
 				>
 					<div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }}>
-						<img 
-							src={product.img} 
-							alt={product.name} 
+						<img
+							src={product.img}
+							alt={product.name}
 							style={{
 								maxWidth: '100%',
 								maxHeight: '90vh',
 								objectFit: 'contain'
 							}}
 						/>
-						<button 
-							onClick={toggleZoom} 
+						<button
+							onClick={toggleZoom}
 							style={{
 								position: 'absolute',
 								top: '-40px',
@@ -634,7 +461,7 @@ const ProductDetail = () => {
 					</div>
 				</div>
 			)}
-			
+
 			{/* Reviews Section */}
 			<ProductReviews productId={product.id} />
 
@@ -668,38 +495,6 @@ const ProductDetail = () => {
 					opacity: 0.5;
 					cursor: not-allowed;
 					pointer-events: none;
-				}
-				.product-quantity {
-					margin-top: 8px;
-					font-size: 14px;
-					color: #555;
-				}
-				.quantity-number {
-					font-weight: bold;
-					color: #e65540;
-				}
-				.out-of-stock-text {
-					color: #e65540;
-					font-weight: bold;
-				}
-				.stock-info {
-					display: inline-block;
-					padding: 4px 0;
-				}
-				.size-info {
-					margin-top: 8px;
-					font-size: 13px;
-					color: #666;
-				}
-				.no-sizes {
-					font-style: italic;
-					color: #dc3545;
-				}
-				.loading-sizes {
-					padding: 10px;
-					text-align: center;
-					font-style: italic;
-					color: #666;
 				}
 			`}</style>
 		</div>
