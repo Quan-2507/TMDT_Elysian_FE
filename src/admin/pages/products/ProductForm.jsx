@@ -176,28 +176,34 @@ const ProductForm = () => {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
-  
+
   const handleSizeToggle = (size) => {
+    if (!availableSizes.includes(size)) {
+      console.warn(`Invalid size: ${size}`);
+      return;
+    }
+
     setFormData(prev => {
       const newSizes = prev.sizes.includes(size)
-        ? prev.sizes.filter(s => s !== size)
-        : [...prev.sizes, size];
-      
-      // If a size is being added, initialize its quantity using existing data or default to 0
+          ? prev.sizes.filter(s => s !== size)
+          : [...prev.sizes, size];
+
       if (!prev.sizes.includes(size)) {
-        // Kiểm tra xem có dữ liệu kích thước đã tồn tại không
-        const existingSize = productSizes.find(s => s.size === size);
-        const initialQuantity = existingSize ? existingSize.quantity : 0;
-        
+        const existingSize = Array.isArray(productSizes)
+            ? productSizes.find(s => s?.size === size)
+            : null;
+        const initialQuantity = existingSize && !isNaN(existingSize.quantity)
+            ? Number(existingSize.quantity)
+            : 1; // Giá trị mặc định là 1
+
         setSizeQuantities(prevQuantities => ({
           ...prevQuantities,
           [size]: initialQuantity
         }));
       }
-      
-      // Recalculate total quantity after toggling a size
+
       setTimeout(() => recalculateTotalQuantity(), 0);
-      
+
       return { ...prev, sizes: newSizes };
     });
   };
@@ -419,16 +425,16 @@ const ProductForm = () => {
     }
     
     // Validate that at least one size is selected
-    if (!formData.sizes || formData.sizes.length === 0) {
-      Swal.fire({
-        title: 'Thiếu kích thước',
-        text: 'Vui lòng chọn ít nhất một kích thước và nhập số lượng tương ứng.',
-        icon: 'warning',
-        confirmButtonText: 'Đóng',
-        confirmButtonColor: '#e65540'
-      });
-      return;
-    }
+    // if (!formData.sizes || formData.sizes.length === 0) {
+    //   Swal.fire({
+    //     title: 'Thiếu kích thước',
+    //     text: 'Vui lòng chọn ít nhất một kích thước và nhập số lượng tương ứng.',
+    //     icon: 'warning',
+    //     confirmButtonText: 'Đóng',
+    //     confirmButtonColor: '#e65540'
+    //   });
+    //   return;
+    // }
     
     try {
       setLoading(true);
@@ -643,36 +649,7 @@ const ProductForm = () => {
                 rows="5"
               ></textarea>
             </div>
-            
-            <div className="form-group checkbox-group">
-              <input
-                type="checkbox"
-                id="inStock"
-                name="inStock"
-                checked={formData.inStock}
-                onChange={handleChange}
-              />
-              <label htmlFor="inStock">Còn hàng</label>
-              <p className="field-help-text">
-                Khi sản phẩm hết hàng, khách hàng sẽ không thể thêm sản phẩm vào giỏ hàng. 
-                Bạn có thể quản lý trạng thái tồn kho chi tiết hơn trong mục "Quản lý tồn kho".
-              </p>
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="quantity">Tổng số lượng tồn kho</label>
-              <input
-                type="number"
-                id="quantity"
-                name="quantity"
-                value={formData.quantity}
-                readOnly
-                className="quantity-input"
-              />
-              <p className="field-help-text">
-                Tổng số lượng sản phẩm được tính từ các kích thước bên dưới. Khi tổng số lượng bằng 0, sản phẩm sẽ tự động được đánh dấu là hết hàng.
-              </p>
-            </div>
+
           </div>
           
           <div className="form-section">
@@ -760,48 +737,6 @@ const ProductForm = () => {
                       </>
                     )}
                   </p>
-                </div>
-              )}
-            </div>
-            
-            <h2>Kích thước và số lượng</h2>
-            
-            <div className="form-group size-quantity-container">
-              <label>Chọn kích thước và nhập số lượng cho mỗi kích thước</label>
-              <div className="size-options">
-                {availableSizes.map((size, index) => (
-                  <div key={index} className="size-option-with-quantity">
-                  <div 
-                    className={`size-option ${formData.sizes.includes(size) ? 'selected' : ''}`}
-                    onClick={() => handleSizeToggle(size)}
-                  >
-                    {size}
-                    </div>
-                    {formData.sizes.includes(size) && (
-                      <div className="size-quantity">
-                        <label htmlFor={`quantity-${size}`} className="size-quantity-label">Số lượng:</label>
-                        <input
-                          id={`quantity-${size}`}
-                          type="number"
-                          min="0"
-                          value={sizeQuantities[size] || 0}
-                          onChange={(e) => handleSizeQuantityChange(size, e.target.value)}
-                          className="size-quantity-input"
-                        />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <p className="field-help-text">
-                <strong>Hướng dẫn:</strong> Nhấp vào kích thước để chọn, sau đó nhập số lượng cho mỗi kích thước đã chọn. 
-                Tổng số lượng sẽ được tự động tính.
-              </p>
-              
-              {formData.sizes.length === 0 && (
-                <div className="no-sizes-warning">
-                  <i className="fa fa-exclamation-triangle"></i> 
-                  Vui lòng chọn ít nhất một kích thước và nhập số lượng tương ứng
                 </div>
               )}
             </div>

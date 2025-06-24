@@ -720,13 +720,13 @@ const ProductStockManager = () => {
           className="mark-in-stock-btn"
           onClick={() => handleBulkUpdateStock(true)}
         >
-          Đánh dấu tất cả là còn hàng
+          Đánh dấu tất cả là khả dụng
         </button>
         <button
           className="mark-out-of-stock-btn"
           onClick={() => handleBulkUpdateStock(false)}
         >
-          Đánh dấu tất cả là hết hàng
+          Đánh dấu tất cả là không khả dụng
         </button>
       </div>
       
@@ -739,7 +739,6 @@ const ProductStockManager = () => {
               <th>Tên sản phẩm</th>
               <th>Danh mục</th>
               <th>Trạng thái</th>
-              <th>Số lượng</th>
               <th>Thao tác</th>
             </tr>
           </thead>
@@ -767,21 +766,9 @@ const ProductStockManager = () => {
                         disabled={updatingProductId === product.id}
                       />
                       <label htmlFor={`stock-toggle-${product.id}`}>
-                        {product.inStock ? 'Còn hàng' : 'Hết hàng'}
+                        {product.inStock ? 'Khả dụng' : 'Không khả dụng'}
                       </label>
                     </div>
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={product.id in editingQuantities ? editingQuantities[product.id] : (product.quantity || 0)}
-                      min="0"
-                      onChange={(e) => handleQuantityInputChange(product.id, parseInt(e.target.value) || 0)}
-                      onBlur={(e) => handleQuantityInputBlur(product.id)}
-                      onKeyDown={(e) => handleQuantityKeyDown(e, product.id)}
-                      disabled={updatingProductId === product.id || !product.inStock}
-                      className="quantity-input"
-                    />
                   </td>
                   <td className="action-buttons">
                     <button 
@@ -790,13 +777,6 @@ const ProductStockManager = () => {
                       title="Chỉnh sửa sản phẩm"
                     >
                       <i className="fa fa-edit"></i>
-                    </button>
-                    <button 
-                      className="manage-sizes-btn"
-                      onClick={() => toggleProductExpand(product.id)}
-                      title="Quản lý kích thước"
-                    >
-                      <i className="fa fa-th-list"></i>
                     </button>
                   </td>
                 </tr>

@@ -15,7 +15,7 @@ const Sidebar = ({ isOpen, links = [] }) => {
   return (
     <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
       <div className="sidebar-header">
-        <h2>Fashion Admin</h2>
+        <h2>Admin</h2>
       </div>
       
       <nav className="sidebar-nav">
