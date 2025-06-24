@@ -139,7 +139,7 @@ const Product = () => {
     };
 
     // Number of categories to show before grouping into dropdown
-    const visibleCategoryCount = 3;
+    const visibleCategoryCount = 4;
 
     // Show loading state
     if (loading) {
@@ -224,23 +224,23 @@ const Product = () => {
                                 {category}
                             </button>
                         ))}
-                        <div className="dropdown">
-                            <button className="dropbtn stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
-                                Nhiều Hơn
-                            </button>
-                            <div className="dropdown-content">
-                                {categories.slice(visibleCategoryCount).map((category, index) => (
-                                    <a
-                                        href="#"
-                                        key={index}
-                                        className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${category === selectedCategory ? 'how-active1' : ''}`}
-                                        onClick={() => handleCategoryChange(category)}
-                                    >
-                                        {category}
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
+                        {/*<div className="dropdown">*/}
+                        {/*    <button className="dropbtn stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">*/}
+                        {/*        Nhiều Hơn*/}
+                        {/*    </button>*/}
+                        {/*    <div className="dropdown-content">*/}
+                        {/*        {categories.slice(visibleCategoryCount).map((category, index) => (*/}
+                        {/*            <a*/}
+                        {/*                href="#"*/}
+                        {/*                key={index}*/}
+                        {/*                className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${category === selectedCategory ? 'how-active1' : ''}`}*/}
+                        {/*                onClick={() => handleCategoryChange(category)}*/}
+                        {/*            >*/}
+                        {/*                {category}*/}
+                        {/*            </a>*/}
+                        {/*        ))}*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
                     </div>
                     <div className="flex-w flex-c-m m-tb-10">
                         <div
@@ -347,7 +347,7 @@ const Product = () => {
                                         >
                                             {product.name}
                                             {!product.inStock && (
-                                                <span className="product-stock-badge">Hết hàng</span>
+                                                <span className="product-stock-badge"></span>
                                             )}
                                         </a>
                                         <span className="stext-105 cl3">{product.price.toLocaleString()} VND</span>
