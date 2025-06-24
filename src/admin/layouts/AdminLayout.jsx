@@ -15,15 +15,12 @@ const sidebarLinks = [
       { to: '/admin/products', text: 'Danh sách sản phẩm' },
       { to: '/admin/products/stock', text: 'Quản lý tồn kho' },
       { to: '/admin/products/add', text: 'Thêm sản phẩm mới' },
-      { to: '/admin/products/bulk-upload', text: 'Nhập hàng loạt' }
     ]
   },
   { to: '/admin/categories', icon: 'fas fa-tags', text: 'Danh mục' },
   { to: '/admin/orders', icon: 'fas fa-shopping-cart', text: 'Đơn hàng' },
   { to: '/admin/customers', icon: 'fas fa-users', text: 'Khách hàng' },
   { to: '/admin/discount', icon: 'fas fa-percent', text: 'Mã giảm giá' },
-  { to: '/admin/loyalty', icon: 'fas fa-award', text: 'Tích điểm' },
-  { to: '/admin/chat', icon: 'fas fa-comments', text: 'Chat hỗ trợ' },
   { to: '/admin/notifications', icon: 'fas fa-bell', text: 'Thông báo' },
   { to: '/admin/settings/payment', icon: 'fas fa-credit-card', text: 'Thanh toán' },
   {

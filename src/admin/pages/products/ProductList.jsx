@@ -147,9 +147,6 @@ const ProductList = () => {
       <div className="product-list-header">
         <h1>Quản lý sản phẩm</h1>
         <div className="header-actions">
-          <Link to="/admin/products/bulk-upload" className="bulk-upload-button">
-            <i className="fa fa-file-import"></i> Nhập hàng loạt
-          </Link>
           <Link to="/admin/products/stock" className="stock-manager-button">
             <i className="fa fa-cubes"></i> Quản lý tồn kho
           </Link>
@@ -182,8 +179,8 @@ const ProductList = () => {
         <div className="stock-filter">
           <select value={stockFilter} onChange={handleStockFilterChange}>
             <option value="all">Tất cả trạng thái</option>
-            <option value="inStock">Còn hàng</option>
-            <option value="outOfStock">Hết hàng</option>
+            <option value="inStock">Khả dụng</option>
+            <option value="outOfStock">Không khả dụng</option>
           </select>
         </div>
         
@@ -212,7 +209,6 @@ const ProductList = () => {
               <th>Tên sản phẩm</th>
               <th>Danh mục</th>
               <th>Giá</th>
-              <th>Số lượng</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
@@ -231,7 +227,6 @@ const ProductList = () => {
                   <td>{product.name}</td>
                   <td>{product.category?.name || 'Uncategorized'}</td>
                   <td>{product.price.toLocaleString()} VNĐ</td>
-                  <td>{product.quantity}</td>
                   <td>
                     {!product.inStock && (
                       <span 
@@ -239,7 +234,7 @@ const ProductList = () => {
                         onClick={() => handleToggleStock(product.id, product.inStock)}
                         title="Click để thay đổi trạng thái"
                       >
-                        Hết hàng
+                        Không khả dụng
                       </span>
                     )}
                     {product.inStock && (
@@ -248,7 +243,7 @@ const ProductList = () => {
                         onClick={() => handleToggleStock(product.id, product.inStock)}
                         title="Click để đánh dấu hết hàng"
                       >
-                        <i className="fa fa-check-circle"></i> Còn hàng
+                        <i className="fa fa-check-circle"></i> Khả dụng
                       </span>
                     )}
                   </td>

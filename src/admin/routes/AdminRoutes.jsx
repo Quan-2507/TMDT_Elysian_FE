@@ -68,11 +68,11 @@ const AdminRoutes = () => {
         </PrivateRoute>
       } />
       
-      <Route path="products/bulk-upload" element={
-        <PrivateRoute>
-          <ProductBulkUpload />
-        </PrivateRoute>
-      } />
+      {/*<Route path="products/bulk-upload" element={*/}
+      {/*  <PrivateRoute>*/}
+      {/*    <ProductBulkUpload />*/}
+      {/*  </PrivateRoute>*/}
+      {/*} />*/}
       
       {/* Category Management */}
       <Route path="categories" element={
