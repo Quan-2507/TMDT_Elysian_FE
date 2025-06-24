@@ -176,28 +176,34 @@ const ProductForm = () => {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
-  
+
   const handleSizeToggle = (size) => {
+    if (!availableSizes.includes(size)) {
+      console.warn(`Invalid size: ${size}`);
+      return;
+    }
+
     setFormData(prev => {
       const newSizes = prev.sizes.includes(size)
-        ? prev.sizes.filter(s => s !== size)
-        : [...prev.sizes, size];
-      
-      // If a size is being added, initialize its quantity using existing data or default to 0
+          ? prev.sizes.filter(s => s !== size)
+          : [...prev.sizes, size];
+
       if (!prev.sizes.includes(size)) {
-        // Kiểm tra xem có dữ liệu kích thước đã tồn tại không
-        const existingSize = productSizes.find(s => s.size === size);
-        const initialQuantity = existingSize ? existingSize.quantity : 0;
-        
+        const existingSize = Array.isArray(productSizes)
+            ? productSizes.find(s => s?.size === size)
+            : null;
+        const initialQuantity = existingSize && !isNaN(existingSize.quantity)
+            ? Number(existingSize.quantity)
+            : 1; // Giá trị mặc định là 1
+
         setSizeQuantities(prevQuantities => ({
           ...prevQuantities,
           [size]: initialQuantity
         }));
       }
-      
-      // Recalculate total quantity after toggling a size
+
       setTimeout(() => recalculateTotalQuantity(), 0);
-      
+
       return { ...prev, sizes: newSizes };
     });
   };
@@ -419,16 +425,16 @@ const ProductForm = () => {
     }
     
     // Validate that at least one size is selected
-    if (!formData.sizes || formData.sizes.length === 0) {
-      Swal.fire({
-        title: 'Thiếu kích thước',
-        text: 'Vui lòng chọn ít nhất một kích thước và nhập số lượng tương ứng.',
-        icon: 'warning',
-        confirmButtonText: 'Đóng',
-        confirmButtonColor: '#e65540'
-      });
-      return;
-    }
+    // if (!formData.sizes || formData.sizes.length === 0) {
+    //   Swal.fire({
+    //     title: 'Thiếu kích thước',
+    //     text: 'Vui lòng chọn ít nhất một kích thước và nhập số lượng tương ứng.',
+    //     icon: 'warning',
+    //     confirmButtonText: 'Đóng',
+    //     confirmButtonColor: '#e65540'
+    //   });
+    //   return;
+    // }
     
     try {
       setLoading(true);

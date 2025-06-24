@@ -30,7 +30,9 @@ import OrderSuccess from './user/components/Payment/OrderSuccess';
 import UserOrderDetail from './user/components/Profile/tabs/OrderDetail';
 import ChatWidget from './user/components/Chat/ChatWidget';
 import { LanguageProvider } from './i18n/LanguageContext'; // Import Context
-import './i18n'; // Import cấu hình i18n
+import './i18n';
+import ProductForm from "./admin/pages/products/ProductForm";
+import PostProduct from "./user/components/Product/PostProduct"; // Import cấu hình i18n
 const Layout = () => {
     return (
         <div>
@@ -72,6 +74,7 @@ const router = createBrowserRouter([
             { path: 'forgot-password', element: <ForgotPassword /> },
             { path: 'reset-password', element: <ResetPassword /> },
             { path: 'account/orders/:orderId', element: <UserOrderDetail /> },
+            { path: 'post/add', element: <PostProduct /> },
         ],
     },
     {
